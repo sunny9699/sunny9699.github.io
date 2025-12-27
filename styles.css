@@ -276,6 +276,8 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    min-width: 120px; /* Prevent fluctuation between Lumos/Nox */
+    justify-content: center;
 }
 
 .theme-toggle:hover {
@@ -292,6 +294,8 @@ body::before {
 .theme-text {
     font-size: 0.9rem;
     letter-spacing: 1px;
+    min-width: 50px; /* Prevent text width changes */
+    text-align: center;
 }
 
 @keyframes iconFloat {
@@ -358,7 +362,7 @@ body::before {
 .section-subtitle {
     text-align: center;
     font-size: 1.25rem;
-    color: var(--old-paper);
+    color: var(--parchment); /* Theme-aware: dark in light mode, light in dark mode */
     margin-bottom: 3rem;
     font-style: italic;
 }
@@ -420,6 +424,11 @@ body::before {
         0 4px 8px rgba(0, 0, 0, 0.5);
     letter-spacing: 4px;
     line-height: 1.2;
+}
+
+.name-part {
+    display: inline-block;
+    white-space: nowrap;
 }
 
 .letter-glow {
@@ -553,15 +562,7 @@ body::before {
 
 /* === PARCHMENT SECTION === */
 .parchment-section {
-    background: 
-        linear-gradient(rgba(244, 232, 208, 0.05), rgba(244, 232, 208, 0.05)),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(212, 175, 55, 0.05) 2px,
-            rgba(212, 175, 55, 0.05) 4px
-        );
+    background: rgba(212, 175, 55, 0.02);
 }
 
 .about-content p {
@@ -656,7 +657,7 @@ body::before {
 
 /* === DAILY PROPHET TIMELINE === */
 .daily-prophet-section {
-    background: rgba(244, 232, 208, 0.03);
+    background: rgba(212, 175, 55, 0.02);
 }
 
 .timeline {
@@ -798,15 +799,7 @@ body::before {
 
 /* === SPELLBOOK SKILLS === */
 .spellbook-section {
-    background: 
-        linear-gradient(rgba(26, 20, 16, 0.95), rgba(26, 20, 16, 0.95)),
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(212, 175, 55, 0.02) 10px,
-            rgba(212, 175, 55, 0.02) 20px
-        );
+    background: rgba(212, 175, 55, 0.02);
 }
 
 .skills-grid {
@@ -899,7 +892,7 @@ body::before {
 
 /* === WANTED POSTERS (PROJECTS) === */
 .projects-section {
-    background: rgba(116, 0, 1, 0.05);
+    background: rgba(212, 175, 55, 0.02);
 }
 
 .projects-grid {
@@ -1004,10 +997,10 @@ body::before {
 
 /* === RESUME SECTION === */
 .resume-section {
-    background: transparent; /* Changed from old-paper to let container background show */
+    background: rgba(212, 175, 55, 0.02);
     position: relative;
     text-align: center;
-    padding-bottom: 4rem; /* Add spacing */
+    padding-bottom: 4rem;
 }
 
 /* Match the exact style of .house-card, .spell-card, .wanted-poster */
@@ -1077,9 +1070,7 @@ body::before {
 
 /* === OWL POST (CONTACT) === */
 .owl-post-section {
-    background: 
-        linear-gradient(rgba(26, 20, 16, 0.95), rgba(26, 20, 16, 0.95)),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><text x="10" y="40" font-size="30" opacity="0.05">🦉</text></svg>');
+    background: rgba(212, 175, 55, 0.02);
 }
 
 .contact-grid {
@@ -1290,15 +1281,17 @@ body::before {
         text-align: center;
         padding: 1rem 2rem !important;
         margin: 0 auto;
+        display: block;
     }
     
     /* Mobile Theme Toggle */
     .theme-toggle {
         width: 80%;
         justify-content: center;
-        padding: 0.8rem;
+        padding: 1rem 2rem;
         margin: 0.5rem auto 0;
-        font-size: 1.1rem;
+        font-size: 1rem;
+        min-width: unset; /* Remove desktop min-width on mobile */
     }
     
     /* Hamburger Menu */
@@ -1353,7 +1346,7 @@ body::before {
     
     .hero-name {
         font-size: clamp(2.2rem, 10vw, 3.5rem);
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         margin-bottom: 1rem;
     }
     
@@ -1493,8 +1486,8 @@ body::before {
     }
     
     .hero-name {
-        font-size: clamp(2rem, 12vw, 3rem);
-        letter-spacing: 1px;
+        font-size: clamp(1.8rem, 10vw, 2.8rem);
+        letter-spacing: 0px;
     }
     
     .hero-title {
