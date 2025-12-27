@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunny Panchal - Magical Backend Developer</title>
+    <meta name="description" content="Backend Developer specializing in Node.js, NestJS, and AWS">
+    
+    <!-- Google Fonts - Magical Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Magical Particles -->
+    <div class="magical-particles" id="particles"></div>
+    
+    <!-- Floating Candles -->
+    <div class="floating-candles">
+        <div class="candle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="candle" style="left: 30%; animation-delay: 1.5s;"></div>
+        <div class="candle" style="left: 50%; animation-delay: 3s;"></div>
+        <div class="candle" style="left: 70%; animation-delay: 2s;"></div>
+        <div class="candle" style="left: 90%; animation-delay: 0.5s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#home" class="nav-brand">
+                <span class="wand-icon">⚡</span>
+                Sunny Panchal
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Magical Skills</a></li>
+                <li><a href="#projects">Spells & Projects</a></li>
+                <li><a href="#contact" class="nav-cta">Send Owl</a></li>
+                <li>
+                    <button class="theme-toggle" id="themeToggle" title="Cast Lumos/Nox">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-text">Nox</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-text">
+                <div class="magical-quote">"Code is our most powerful magic"</div>
+                <h1 class="hero-name">
+                    <span class="letter-glow">S</span>unny 
+                    <span class="letter-glow">P</span>anchal
+                </h1>
+                <h2 class="hero-title">⚡ Master of Backend Sorcery ⚡</h2>
+                <p class="hero-description">
+                    A skilled wizard in the ancient arts of Node.js, NestJS, and AWS Cloud Magic. 
+                    With 3+ enchanted years, I conjure scalable backend systems and craft 
+                    powerful APIs that withstand the test of time.
+                </p>
+                <div class="hero-actions">
+                <a href="#projects" class="btn btn-primary">View Spells & Charms</a>
+                <a href="assets/Sunny_Panchal_Resume.pdf" download class="btn btn-outline">
+                    <span>📜</span> Acquire Parchment
+                </a>
+                <a href="#contact" class="btn btn-outline">Send an Owl</a>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About - Marauder's Map Style -->
+    <section class="section parchment-section" id="about">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">✦</span>
+                The Wizarding Chronicles
+                <span class="title-flourish">✦</span>
+            </h2>
+            <div class="about-content">
+                <p class="marauders-text">I solemnly swear that I am a passionate Backend Developer...</p>
+                <p>
+                    With over 3 enchanted years mastering the mystical arts of server conjuration 
+                    and serverless spellcasting, I weave code that brings digital realms to life. 
+                    My wand specializes in crafting APIs of great power and microservice architectures 
+                    that span across cloud kingdoms.
+                </p>
+                <p>
+                    From the depths of database dungeons to the heights of cloud castles, 
+                    I command the ancient languages of Node.js and the powerful frameworks 
+                    of NestJS, channeling AWS magic to build fortresses of scalability.
+                </p>
+                
+                <div class="about-cards">
+                    <div class="house-card gryffindor">
+                        <div class="house-crest">🦁</div>
+                        <h3>Education</h3>
+                        <p><strong>BE, Computer Engineering</strong></p>
+                        <p>GEC, Gandhinagar</p>
+                        <p class="points">8.01 CGPA • 2018-2022</p>
+                    </div>
+                    <div class="house-card ravenclaw">
+                        <div class="house-crest">🦅</div>
+                        <h3>Location</h3>
+                        <p><strong>Based in India</strong></p>
+                        <p>Remote Magical Work</p>
+                        <p class="points">Available Globally via Floo Network</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience - Newspaper Style -->
+    <section class="section daily-prophet-section" id="experience">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">✦</span>
+                The Daily Prophet Records
+                <span class="title-flourish">✦</span>
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">⚡</div>
+                    <div class="prophet-article">
+                        <div class="article-header">
+                            <span class="date-stamp">Oct 2024 - Present</span>
+                            <span class="breaking-news">BREAKING NEWS</span>
+                        </div>
+                        <h3>MindInventory - Associate Software Engineer</h3>
+                        <ul>
+                            <li>Conjured scalable backend enchantments using Node.js, NestJS, and Express.js</li>
+                            <li>Mastered AWS cloud spells (Lambda, S3, API Gateway, RDS) for mystical deployments</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">⚡</div>
+                    <div class="prophet-article">
+                        <div class="article-header">
+                            <span class="date-stamp">Dec 2023 - Oct 2024</span>
+                        </div>
+                        <h3>AIPXperts Technolabs - Software Engineer</h3>
+                        <ul>
+                            <li>Designed powerful backend charms using NestJS and GraphQL runes</li>
+                            <li>Commanded AWS forces ensuring eternal scalability and availability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">⚡</div>
+                    <div class="prophet-article">
+                        <div class="article-header">
+                            <span class="date-stamp">Apr 2022 - Oct 2023</span>
+                        </div>
+                        <h3>iQud Tek LLP - Software Engineer</h3>
+                        <ul>
+                            <li>Crafted automated web-scraping familiars using Puppeteer magic</li>
+                            <li>Performed divination tests ensuring precision and performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills - Spellbook Style -->
+    <section class="section spellbook-section" id="skills">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">✦</span>
+                My Spellbook Arsenal
+                <span class="title-flourish">✦</span>
+            </h2>
+            <div class="skills-grid">
+                <div class="spell-card">
+                    <div class="spell-icon">🔥</div>
+                    <h3>Backend Charms</h3>
+                    <div class="spell-list">
+                        <span class="spell">Node.js</span>
+                        <span class="spell">NestJS</span>
+                        <span class="spell">Express.js</span>
+                        <span class="spell">GraphQL</span>
+                        <span class="spell">RESTful APIs</span>
+                    </div>
+                </div>
+
+                <div class="spell-card">
+                    <div class="spell-icon">☁️</div>
+                    <h3>Cloud Sorcery</h3>
+                    <div class="spell-list">
+                        <span class="spell">AWS Lambda</span>
+                        <span class="spell">API Gateway</span>
+                        <span class="spell">S3</span>
+                        <span class="spell">EC2</span>
+                        <span class="spell">Docker</span>
+                        <span class="spell">Serverless</span>
+                    </div>
+                </div>
+
+                <div class="spell-card">
+                    <div class="spell-icon">📚</div>
+                    <h3>Database Runes</h3>
+                    <div class="spell-list">
+                        <span class="spell">PostgreSQL</span>
+                        <span class="spell">MySQL</span>
+                        <span class="spell">MongoDB</span>
+                        <span class="spell">Redis</span>
+                        <span class="spell">DynamoDB</span>
+                    </div>
+                </div>
+
+                <div class="spell-card">
+                    <div class="spell-icon">⚗️</div>
+                    <h3>Ancient Languages</h3>
+                    <div class="spell-list">
+                        <span class="spell">JavaScript</span>
+                        <span class="spell">TypeScript</span>
+                        <span class="spell">SQL</span>
+                        <span class="spell">Git</span>
+                        <span class="spell">Postman</span>
+                        <span class="spell">Jest</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects - Wanted Posters Style -->
+    <section class="section projects-section" id="projects">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">✦</span>
+                Featured Magical Projects
+                <span class="title-flourish">✦</span>
+            </h2>
+            <div class="projects-grid">
+                <div class="wanted-poster">
+                    <div class="poster-header">LEGENDARY PROJECT</div>
+                    <div class="poster-border"></div>
+                    <h3>CollabCRM</h3>
+                    <p class="reward">⭐ Enterprise Potion Master ⭐</p>
+                    <p>
+                        A legendary CRM cauldron supporting employee enchantments, project 
+                        prophecies, and recruitment rituals. Brewed with Node.js serverless 
+                        magic and Kanban-style tracking charms.
+                    </p>
+                    <div class="ingredients">
+                        <span>Node.js</span>
+                        <span>ReactJS</span>
+                        <span>PostgreSQL</span>
+                        <span>AWS Lambda</span>
+                        <span>Serverless</span>
+                    </div>
+                </div>
+
+                <div class="wanted-poster">
+                    <div class="poster-header">LEGENDARY PROJECT</div>
+                    <div class="poster-border"></div>
+                    <h3>School Management</h3>
+                    <p class="reward">⭐ Educational Magic ⭐</p>
+                    <p>
+                        Hogwarts-inspired management system enabling mystical parent-teacher 
+                        communication and digital classrooms. Features real-time owls (Socket.IO) 
+                        delivering messages across the castle.
+                    </p>
+                    <div class="ingredients">
+                        <span>NestJS</span>
+                        <span>ReactJS</span>
+                        <span>PostgreSQL</span>
+                        <span>Socket.IO</span>
+                        <span>Redis</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section class="section resume-section" id="resume">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">📜</span>
+                Official Transcript
+                <span class="title-flourish">📜</span>
+            </h2>
+            <div class="resume-scroll-container">
+                <div class="resume-content">
+                    <h3>The Magical Credentials of Sunny Panchal</h3>
+                    <p>Unfurl the complete enchanted history, detailed charms, and certifications in a portable parchment format.</p>
+                    <a href="assets/Sunny_Panchal_Resume.pdf" download class="btn btn-primary resume-btn">
+                        <span>✨</span> Download Resume <span>✨</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact - Owl Post -->
+    <section class="section owl-post-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-flourish">✦</span>
+                Send an Owl
+                <span class="title-flourish">✦</span>
+            </h2>
+            <p class="section-subtitle">
+                Have a magical project or quest? Send your owl my way!
+            </p>
+            <div class="contact-grid">
+                <a href="mailto:panchalsunny785@gmail.com" class="owl-card">
+                    <div class="owl-icon">🦉</div>
+                    <h4>Magical Post</h4>
+                    <p>panchalsunny785@gmail.com</p>
+                </a>
+
+                <a href="https://www.linkedin.com/in/sunny9699/" target="_blank" class="owl-card">
+                    <div class="owl-icon">🔗</div>
+                    <h4>Professional Wizards Network</h4>
+                    <p>sunny9699</p>
+                </a>
+
+                <a href="https://github.com/sunny9699" target="_blank" class="owl-card">
+                    <div class="owl-icon">⚡</div>
+                    <h4>Code Repository</h4>
+                    <p>sunny9699</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Mischief Managed • &copy; 2026 Sunny Panchal • All Rights Reserved</p>
+            <p class="footer-spell">⚡ Crafted with magic and code ⚡</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
