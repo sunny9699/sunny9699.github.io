@@ -1,0 +1,25 @@
+{
+  "name": "Sunny Panchal — Software Engineer & Backend Architect",
+  "short_name": "Sunny Panchal",
+  "description": "Software Engineer with 4+ years of experience designing and scaling production REST & GraphQL APIs, microservices, and serverless backends on AWS.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#0070f3",
+  "categories": ["technology", "developer", "portfolio"],
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/avatar.svg",
+      "sizes": "160x160",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+

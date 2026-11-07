@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09090b"/>
+      <stop offset="60%" stop-color="#0f0f13"/>
+      <stop offset="100%" stop-color="#14141a"/>
+    </linearGradient>
+    <linearGradient id="accentGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0070f3" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0070f3"/>
+      <stop offset="100%" stop-color="#00dfd8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Radial Glow Behind -->
+  <circle cx="1020" cy="180" r="380" fill="url(#accentGlow)"/>
+  <circle cx="160" cy="520" r="300" fill="#0070f3" opacity="0.08"/>
+
+  <!-- Subtle Grid Pattern -->
+  <g opacity="0.07" stroke="#ffffff" stroke-width="1">
+    <line x1="80" y1="0" x2="80" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="320" y1="0" x2="320" y2="630"/>
+    <line x1="440" y1="0" x2="440" y2="630"/>
+    <line x1="560" y1="0" x2="560" y2="630"/>
+    <line x1="680" y1="0" x2="680" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="920" y1="0" x2="920" y2="630"/>
+    <line x1="1040" y1="0" x2="1040" y2="630"/>
+    <line x1="0" y1="80" x2="1200" y2="80"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="320" x2="1200" y2="320"/>
+    <line x1="0" y1="440" x2="1200" y2="440"/>
+    <line x1="0" y1="560" x2="1200" y2="560"/>
+  </g>
+
+  <!-- Monogram Logo Badge -->
+  <rect x="90" y="80" width="60" height="60" rx="14" fill="#000000" stroke="#27272a" stroke-width="2"/>
+  <text x="120" y="122" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="-1">SP</text>
+  <circle cx="138" cy="94" r="5" fill="#0070f3"/>
+
+  <!-- Live Status Pill -->
+  <rect x="170" y="92" width="220" height="36" rx="18" fill="rgba(16, 185, 129, 0.12)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1"/>
+  <circle cx="188" cy="110" r="5" fill="#10b981"/>
+  <text x="202" y="115" font-family="ui-monospace, monospace" font-size="13" font-weight="600" fill="#10b981">AVAILABLE FOR ROLES</text>
+
+  <!-- Name -->
+  <text x="90" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="-2">Sunny Panchal</text>
+
+  <!-- Subtitle / Role -->
+  <text x="90" y="275" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="600" fill="#3291ff" letter-spacing="-0.5">Software Engineer · Backend &amp; Cloud Architecture</text>
+
+  <!-- Bio / Elevator Pitch -->
+  <text x="90" y="330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="400" fill="#a1a1aa">
+    Designing and scaling high-throughput REST &amp; GraphQL APIs, event-driven microservices,
+  </text>
+  <text x="90" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="400" fill="#a1a1aa">
+    and serverless cloud systems on AWS with Node.js, Express, NestJS, PostgreSQL &amp; Redis.
+  </text>
+
+  <!-- Metrics Row -->
+  <g transform="translate(90, 410)">
+    <rect x="0" y="0" width="220" height="72" rx="12" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="20" y="38" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="30" font-weight="800" fill="#ffffff">4+ Years</text>
+    <text x="20" y="58" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" fill="#71717a">Production Experience</text>
+
+    <rect x="240" y="0" width="220" height="72" rx="12" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="260" y="38" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="30" font-weight="800" fill="#ffffff">~30% Cut</text>
+    <text x="260" y="58" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" fill="#71717a">API Response Time</text>
+
+    <rect x="480" y="0" width="220" height="72" rx="12" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <text x="500" y="38" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="30" font-weight="800" fill="#ffffff">99.9%</text>
+    <text x="500" y="58" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" fill="#71717a">System Availability</text>
+  </g>
+
+  <!-- Tech Strip Bottom -->
+  <g transform="translate(90, 545)">
+    <text x="0" y="0" font-family="ui-monospace, monospace" font-size="13" font-weight="600" fill="#52525b" letter-spacing="1">CORE STACK</text>
+    <text x="110" y="0" font-family="ui-monospace, monospace" font-size="14" font-weight="500" fill="#e4e4e7">
+      Node.js · NestJS · Express · TypeScript · AWS Lambda · SQS · PostgreSQL · Redis · Docker · Jest
+    </text>
+  </g>
+
+  <!-- URL Branding Bottom Right -->
+  <text x="1110" y="545" font-family="ui-monospace, monospace" font-size="14" font-weight="600" fill="#3291ff" text-anchor="end">
+    sunny9699.github.io ↗
+  </text>
+</svg>
+
