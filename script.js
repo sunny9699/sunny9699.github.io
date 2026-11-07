@@ -293,27 +293,31 @@ function initContactForm() {
    7. Recruiter & Engineering FAQ Accordion
    ========================================================================== */
 function initFaqAccordion() {
-  const faqQuestions = document.querySelectorAll('.faq-question');
+  const faqItems = document.querySelectorAll('.faq-item');
 
-  faqQuestions.forEach(btn => {
+  faqItems.forEach(item => {
+    const btn = item.querySelector('.faq-question');
+    if (!btn) return;
+
     btn.addEventListener('click', () => {
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      const answerId = btn.getAttribute('aria-controls');
-      const answerEl = document.getElementById(answerId);
+      const isCurrentlyActive = item.classList.contains('active');
 
-      // Close all other accordion items for clean focus
-      faqQuestions.forEach(otherBtn => {
-        if (otherBtn !== btn) {
-          otherBtn.setAttribute('aria-expanded', 'false');
-          const otherAnswer = document.getElementById(otherBtn.getAttribute('aria-controls'));
-          if (otherAnswer) otherAnswer.hidden = true;
+      // Close all other items with smooth collapse
+      faqItems.forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('active')) {
+          otherItem.classList.remove('active');
+          const otherBtn = otherItem.querySelector('.faq-question');
+          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
         }
       });
 
-      // Toggle current
-      btn.setAttribute('aria-expanded', !isExpanded);
-      if (answerEl) {
-        answerEl.hidden = isExpanded;
+      // Toggle current item
+      if (isCurrentlyActive) {
+        item.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        item.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
