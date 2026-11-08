@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectFilters();
   initScrollReveals();
   initProjectModals();
+  initBlueprintTabs();
+  initMatrixFilter();
+  initScenarioSolver();
+  initArticleModal();
 });
 
 /* ==========================================================================
@@ -526,4 +530,393 @@ function showToast(message) {
   toastTimeout = setTimeout(() => {
     toast.classList.remove('show');
   }, 2600);
+}
+
+/* ==========================================================================
+   12. Interactive Architecture Blueprints (#blueprints)
+   ========================================================================== */
+function initBlueprintTabs() {
+  const tabs = document.querySelectorAll('.blueprint-tab');
+  const panels = document.querySelectorAll('.blueprint-panel');
+
+  if (!tabs.length || !panels.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetId = tab.getAttribute('data-blueprint');
+      if (!targetId) return;
+
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      const targetPanel = document.getElementById(`bp-${targetId}`);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   13. Architecture Decision Matrix & Protocol Filter (#benchmarks)
+   ========================================================================== */
+function initMatrixFilter() {
+  const filterBtns = document.querySelectorAll('.matrix-tab-btn');
+  const rows = document.querySelectorAll('.matrix-table tbody tr');
+
+  if (!filterBtns.length || !rows.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cat = btn.getAttribute('data-matrix-cat');
+      rows.forEach(row => {
+        if (cat === 'all' || row.getAttribute('data-cat') === cat) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+/* ==========================================================================
+   14. Interactive System Design Scenario Solver (#benchmarks)
+   ========================================================================== */
+const scenarioSolutions = {
+  fintech: {
+    recommended: 'PostgreSQL (ACID) + Redis Distributed Locks + SQS FIFO',
+    storage: 'Amazon RDS PostgreSQL (Multi-AZ with Read Replicas)',
+    transport: 'RESTful API with mandatory X-Idempotency-Key headers',
+    messaging: 'AWS SQS FIFO (Message Grouping & Deduplication ID)',
+    latency: 'p50: 22ms | p99: 68ms',
+    rationale: 'Financial lending workflows forbid race conditions and double underwriting offers. Enforcing strict database ACID isolation combined with atomic Redis locks (SET NX EX) guarantees zero duplicate charges even under retry storms.'
+  },
+  telemetry: {
+    recommended: 'WebSockets (TCP Stream) + Redis Streams / Kafka + TimescaleDB',
+    storage: 'TimescaleDB / Redis In-Memory Circular Buffer',
+    transport: 'Persistent WebSockets with Binary / Protocol Buffers',
+    messaging: 'Redis Streams / AWS Kinesis Partitioned Shards',
+    latency: 'p50: 3ms (frame) | p99: 12ms',
+    rationale: '50,000 GPS coordinate pings per second cannot sustain HTTP connection handshake overhead. Persistent bi-directional WebSockets combined with partitioned streaming buffers decouple real-time driver ingestion from relational archival.'
+  },
+  ecommerce: {
+    recommended: 'ElastiCache Redis Read-Through + DynamoDB / PostgreSQL + Edge CDN',
+    storage: 'Amazon ElastiCache Redis Cluster (Multi-AZ) + PostgreSQL',
+    transport: 'REST / GraphQL with HTTP ETag & Cache-Control headers',
+    messaging: 'AWS SQS Standard Queue for asynchronous checkout orders',
+    latency: 'p50: 2ms (Cache Hit) | p99: 18ms',
+    rationale: 'Flash sales experience an extreme 100:1 read-to-write ratio. Offloading 98% of catalog product queries to Redis clusters backed by CloudFront edge CDN protects the primary database for critical payment transactions.'
+  },
+  'async-docs': {
+    recommended: 'Fast 202 Accepted REST API + S3 SSE + AWS SQS + Lambda Workers',
+    storage: 'Amazon S3 (Server-Side Encryption KMS) + PostgreSQL Ledger',
+    transport: 'REST API returning 202 Accepted + Job Polling / Webhook callback',
+    messaging: 'AWS SQS Standard with Dead-Letter Queue (DLQ)',
+    latency: 'Client Ack: 18ms | Async Worker Execution: 1.4s – 4.2s',
+    rationale: 'OCR extraction and credit bureau checks take seconds and fluctuate wildly. Returning an immediate 202 Accepted with a correlation job ID shields the user from connection timeouts while background workers scale horizontally.'
+  }
+};
+
+function initScenarioSolver() {
+  const selector = document.getElementById('scenarioSelector');
+  const resultPanel = document.getElementById('solverResult');
+  if (!selector || !resultPanel) return;
+
+  function renderScenario(key) {
+    const data = scenarioSolutions[key] || scenarioSolutions.fintech;
+    resultPanel.innerHTML = `
+      <div class="solver-cell">
+        <span class="solver-cell-label">Recommended Architecture</span>
+        <span class="solver-cell-value" style="color: #3b82f6;">${data.recommended}</span>
+      </div>
+      <div class="solver-cell">
+        <span class="solver-cell-label">Primary Data Store</span>
+        <span class="solver-cell-value">${data.storage}</span>
+      </div>
+      <div class="solver-cell">
+        <span class="solver-cell-label">API Transport &amp; Protocol</span>
+        <span class="solver-cell-value">${data.transport}</span>
+      </div>
+      <div class="solver-cell">
+        <span class="solver-cell-label">Queueing &amp; Buffering</span>
+        <span class="solver-cell-value">${data.messaging}</span>
+      </div>
+      <div class="solver-cell">
+        <span class="solver-cell-label">Expected Latency Profile</span>
+        <span class="solver-cell-value" style="color: #10b981; font-family: var(--font-mono);">${data.latency}</span>
+      </div>
+      <div class="solver-cell">
+        <span class="solver-cell-label">Fault-Tolerance Strategy</span>
+        <span class="solver-cell-value">Automated Dead-Letter Queue &amp; Circuit Breaking</span>
+      </div>
+      <div class="solver-rationale-cell">
+        <strong style="color: var(--text-primary);">Engineering Rationale:</strong> ${data.rationale}
+      </div>
+    `;
+  }
+
+  selector.addEventListener('change', (e) => {
+    renderScenario(e.target.value);
+  });
+
+  renderScenario(selector.value || 'fintech');
+}
+
+/* ==========================================================================
+   15. Technical Writing Articles Data & Reader Modal (#writing)
+   ========================================================================== */
+const articleData = {
+  'postgres-indexing': {
+    category: 'Database Performance',
+    title: 'PostgreSQL Index Tuning: From 450ms Seq Scans to 12ms Index Conds',
+    meta: 'October 2024 · 8 min read · Engineering Forensics',
+    contentHtml: `
+      <div class="modal-section">
+        <h4>1. Production Incident Context</h4>
+        <p>During an end-of-month financial reconciliation spike, our borrower portal began experiencing severe 504 gateway timeouts. Amazon CloudWatch surfaced an Amazon RDS PostgreSQL CPU spike to 92%, while median query latency on user transaction history endpoints surged from 45ms to over 450ms.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>2. Forensics with EXPLAIN (ANALYZE, BUFFERS)</h4>
+        <p>Running query execution plan diagnostics in our staging environment revealed the root problem:</p>
+        <pre><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT id, amount, status, created_at 
+FROM transactions 
+WHERE tenant_id = 'tenant_892' 
+  AND status = 'COMPLETED' 
+ORDER BY created_at DESC 
+LIMIT 25;</code></pre>
+        <p>The query planner output indicated a devastating Sequential Scan over 4.2 million rows: <code>Seq Scan on transactions (cost=0.00..184520.10 rows=25 width=48) (actual time=412.312..448.910 rows=25 loops=1)</code>. Buffer reads revealed <code>Buffers: shared hit=8940 read=74520</code>, saturating database disk I/O.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>3. The Root Cause: Leftmost Prefix Indexing Rule</h4>
+        <p>An index already existed on <code>transactions(created_at, status)</code>. However, because our query filtered by <code>tenant_id</code> as the primary partition filter, the PostgreSQL B-tree index could not be used efficiently without <code>tenant_id</code> in the leading position of the index composite key.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>4. Engineering Solution: Zero-Downtime Compound Indexing</h4>
+        <p>To eliminate table locking during production deployment, we executed a concurrent compound index migration:</p>
+        <pre><code>CREATE INDEX CONCURRENTLY idx_transactions_tenant_status_created 
+ON transactions (tenant_id, status, created_at DESC);</code></pre>
+        <p>Post-migration execution plan output immediately transformed to an optimal <strong>Index Scan using idx_transactions_tenant_status_created</strong>:</p>
+        <pre><code>Index Scan: actual time=0.082..11.890 rows=25 loops=1
+Buffers: shared hit=42 read=0</code></pre>
+      </div>
+
+      <div class="modal-section">
+        <h4>5. Key Architectural Takeaways</h4>
+        <ul>
+          <li><strong>Index Column Ordering:</strong> Always arrange compound B-tree index columns in order of equality conditions first, followed by range conditions, followed by ordering constraints: <code>(Equality, Equality, Sort)</code>.</li>
+          <li><strong>Buffer Cache Hit Ratio:</strong> Monitor <code>shared hit</code> vs <code>read</code> to distinguish between RAM cache hits and expensive disk I/O reads.</li>
+          <li><strong>Zero-Downtime Safe Migrations:</strong> Never run <code>CREATE INDEX</code> without <code>CONCURRENTLY</code> in production environments.</li>
+        </ul>
+      </div>
+    `
+  },
+
+  'sqs-resilient-pipeline': {
+    category: 'Distributed Systems',
+    title: 'Zero-Data-Loss Background Processing with AWS SQS & Lambda',
+    meta: 'January 2025 · 10 min read · Cloud Architecture',
+    contentHtml: `
+      <div class="modal-section">
+        <h4>1. The Challenge of Synchronous Processing</h4>
+        <p>In our loan origination engine, borrowers submit identity documentation and bank statements for automated credit scoring. Initially, credit checks were invoked synchronously within the HTTP POST request. When third-party credit bureau APIs experienced intermittent 10-second latency spikes, client requests timed out, triggering aggressive user retries and cascading downstream failures.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>2. Decoupled Asynchronous Topology</h4>
+        <p>We re-architected the underwriting pipeline into a decoupled event-driven model:</p>
+        <ul>
+          <li><strong>Ingestion Tier:</strong> Lightweight API Gateway + Lambda authenticates the request, writes an immutable audit record, and immediately replies with <code>202 Accepted</code> containing an <code>application_id</code> in under 25ms.</li>
+          <li><strong>Buffer Tier:</strong> Message is pushed to an AWS SQS Standard Queue with an MD5 hash deduplication key.</li>
+          <li><strong>Worker Tier:</strong> Consumer Lambdas poll SQS in batches of 10, executing the credit checks with exponential backoff.</li>
+        </ul>
+      </div>
+
+      <div class="modal-section">
+        <h4>3. Resiliency Mechanics &amp; DLQ Isolation</h4>
+        <p>To guarantee zero data loss and prevent poison messages from wedging workers:</p>
+        <pre><code>VisibilityTimeout: 6 * FunctionTimeout (e.g. 180s)
+MaxReceiveCount: 3
+DeadLetterTargetArn: arn:aws:sqs:us-east-1:xxx:underwriting-dlq</code></pre>
+        <p>If an unhandled exception or third-party outage occurs, SQS retries the message 3 times with exponential backoff plus full jitter. If all attempts fail, the message is isolated in the Dead-Letter Queue (DLQ), and a CloudWatch alarm alerts the engineering on-call rotation.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>4. Distributed Idempotency with Redis</h4>
+        <p>Because SQS Standard offers <em>at-least-once</em> delivery, network partitions can cause message duplication. We engineered an atomic Redis lock guard:</p>
+        <pre><code>const acquired = await redis.set(
+  \`lock:application:\${appId}\`,
+  workerInstanceId,
+  'NX',
+  'EX',
+  120
+);
+if (!acquired) {
+  logger.warn('Duplicate invocation detected, skipping duplicate processing');
+  return;
+}</code></pre>
+      </div>
+
+      <div class="modal-section">
+        <h4>5. Production Impact</h4>
+        <ul>
+          <li><strong>Zero Data Loss:</strong> 100% of submitted applications were successfully queued and processed.</li>
+          <li><strong>Client Response Time:</strong> Reduced from 4.8s synchronous wait down to 22ms instant acknowledgment.</li>
+          <li><strong>Traffic Leveling:</strong> Absorb 5x traffic surges smoothly with zero database connection exhaustion.</li>
+        </ul>
+      </div>
+    `
+  },
+
+  'nestjs-clean-architecture': {
+    category: 'Backend Architecture',
+    title: 'Clean Architecture & SOLID in Modular NestJS Microservices',
+    meta: 'April 2025 · 9 min read · Software Craftsmanship',
+    contentHtml: `
+      <div class="modal-section">
+        <h4>1. The Trap of Fat Controllers &amp; Tight Coupling</h4>
+        <p>As enterprise backend codebases expand, controllers frequently become tangled with direct ORM queries, third-party payment calls, and business validation rules. Writing unit tests becomes an agonizing exercise requiring massive NestJS test modules, database containers, and hundreds of mock definitions.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>2. Implementing Hexagonal / Clean Architecture in NestJS</h4>
+        <p>We structured our microservices into three strict architectural boundaries following Dependency Inversion:</p>
+        <ul>
+          <li><strong>Domain Layer (Core):</strong> Pure TypeScript entities, domain events, and value objects with 0 external npm dependencies. Contains business invariants that never change regardless of database or framework.</li>
+          <li><strong>Application Layer:</strong> Use Cases / Command Handlers (e.g. <code>ApproveLoanOfferUseCase</code>). Coordinates business flow, orchestrates domain entities, and communicates via abstract interfaces.</li>
+          <li><strong>Infrastructure Layer (Adapters):</strong> PostgreSQL TypeORM repositories, AWS S3 uploaders, Redis caching adapters, and NestJS controllers.</li>
+        </ul>
+      </div>
+
+      <div class="modal-section">
+        <h4>3. Dependency Inversion via Custom Providers</h4>
+        <p>Use cases never import concrete ORM entities. Instead, they depend on abstract Port interfaces:</p>
+        <pre><code>// Domain Port
+export interface ILoanRepository {
+  findById(id: LoanId): Promise<Loan | null>;
+  save(loan: Loan): Promise<void>;
+}
+
+// NestJS Provider Binding
+@Module({
+  providers: [
+    ApproveLoanOfferUseCase,
+    {
+      provide: 'ILoanRepository',
+      useClass: PostgresLoanRepository,
+    },
+  ],
+})
+export class LoanModule {}</code></pre>
+      </div>
+
+      <div class="modal-section">
+        <h4>4. The Testing Payoff: 80% Faster Unit Tests</h4>
+        <p>Because use cases depend purely on interfaces, testing business logic requires zero database spins or heavy test harnesses:</p>
+        <pre><code>describe('ApproveLoanOfferUseCase', () => {
+  it('should transition loan state to APPROVED when credit score meets threshold', async () => {
+    const mockRepo = new InMemoryLoanRepository();
+    const useCase = new ApproveLoanOfferUseCase(mockRepo);
+    
+    await useCase.execute({ loanId: '123' });
+    expect((await mockRepo.findById('123')).status).toBe('APPROVED');
+  });
+});</code></pre>
+        <p>Our entire unit test suite of 450+ tests runs in just 7.8 seconds with 98% coverage of core business rules.</p>
+      </div>
+    `
+  },
+
+  'api-security-hardening': {
+    category: 'API Security',
+    title: 'Hardening REST & GraphQL APIs: Defense-in-Depth & Token Revocation',
+    meta: 'August 2025 · 7 min read · Security Engineering',
+    contentHtml: `
+      <div class="modal-section">
+        <h4>1. The Stateless JWT Invalidation Paradox</h4>
+        <p>JSON Web Tokens (JWT) are widely adopted because they are stateless and verifiable without database lookups. However, in security-critical fintech and healthcare platforms, statelessness becomes a vulnerability: if a user logs out, resets their password, or is suspended, their access token remains valid until expiration unless explicitly revoked.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>2. Architectural Solution: Hybrid Token Revocation with Redis TTL</h4>
+        <p>We solved this by generating a unique cryptographic <code>jti</code> (JWT ID) in every issued access token:</p>
+        <pre><code>// On user logout or password change:
+const remainingTtl = tokenExp - Math.floor(Date.now() / 1000);
+if (remainingTtl > 0) {
+  await redis.set(\`blacklist:\${jti}\`, 'revoked', 'EX', remainingTtl);
+}</code></pre>
+        <p>In our NestJS <code>JwtAuthGuard</code>, we perform a sub-millisecond in-memory Redis check:</p>
+        <pre><code>const isRevoked = await redis.exists(\`blacklist:\${payload.jti}\`);
+if (isRevoked) {
+  throw new UnauthorizedException('Token has been revoked');
+}</code></pre>
+      </div>
+
+      <div class="modal-section">
+        <h4>3. Defending GraphQL Against Recursive Query Attacks</h4>
+        <p>Unlike REST endpoints with fixed payload shapes, GraphQL allows clients to define arbitrary queries. Malicious actors can construct deeply nested queries (e.g. <code>author -> posts -> author -> posts</code>) that choke database resources.</p>
+        <p>We mitigated this by implementing query depth limiting and query complexity scoring:</p>
+        <pre><code>validationRules: [
+  depthLimit(5),
+  createComplexityLimitRule(1000)
+]</code></pre>
+      </div>
+
+      <div class="modal-section">
+        <h4>4. Sliding-Window Rate Limiting in Redis</h4>
+        <p>To defend against credential stuffing and brute-force attacks, we deployed a sliding-window rate limiter utilizing Redis sorted sets (<code>ZADD</code>, <code>ZREMRANGEBYSCORE</code>, <code>ZCARD</code>), enforcing strict quotas of 60 requests/minute on authentication endpoints.</p>
+      </div>
+    `
+  }
+};
+
+function initArticleModal() {
+  const modal = document.getElementById('articleModal');
+  const closeBtn = document.getElementById('articleCloseBtn');
+  const modalCategory = document.getElementById('articleCategory');
+  const modalTitle = document.getElementById('articleTitle');
+  const modalMeta = document.getElementById('articleMeta');
+  const modalBody = document.getElementById('articleBody');
+
+  if (!modal) return;
+
+  window.openArticleModal = function(articleId) {
+    const data = articleData[articleId];
+    if (!data) return;
+
+    if (modalCategory) modalCategory.textContent = data.category;
+    if (modalTitle) modalTitle.textContent = data.title;
+    if (modalMeta) modalMeta.textContent = data.meta;
+    if (modalBody) modalBody.innerHTML = data.contentHtml;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeArticleModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeArticleModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeArticleModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeArticleModal();
+    }
+  });
 }

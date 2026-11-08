@@ -256,6 +256,42 @@
             ]
           },
           {
+            "@type": "Blog",
+            "@id": "https://sunny9699.github.io/#blog",
+            "name": "Sunny Panchal — Technical Architecture & Engineering Notes",
+            "description": "In-depth engineering essays on database internals, distributed systems, AWS serverless, and API security.",
+            "blogPost": [
+              {
+                "@type": "BlogPosting",
+                "headline": "PostgreSQL Index Tuning: From 450ms Seq Scans to 12ms Index Conds",
+                "datePublished": "2024-10-15",
+                "author": { "@id": "https://sunny9699.github.io/#person" },
+                "description": "Deep dive into execution plan forensics with EXPLAIN (ANALYZE, BUFFERS), compound B-tree index ordering, and partial indexes."
+              },
+              {
+                "@type": "BlogPosting",
+                "headline": "Zero-Data-Loss Background Processing with AWS SQS & Lambda",
+                "datePublished": "2025-01-20",
+                "author": { "@id": "https://sunny9699.github.io/#person" },
+                "description": "Designing resilient asynchronous pipelines: handling visibility timeouts, exponential backoff, DLQs, and Redis idempotency locks."
+              },
+              {
+                "@type": "BlogPosting",
+                "headline": "Clean Architecture & SOLID in Modular NestJS Microservices",
+                "datePublished": "2025-04-10",
+                "author": { "@id": "https://sunny9699.github.io/#person" },
+                "description": "Structuring enterprise NestJS backends with clean domain boundaries, custom providers, and automated Jest test suites."
+              },
+              {
+                "@type": "BlogPosting",
+                "headline": "Hardening REST & GraphQL APIs: Defense-in-Depth & Token Revocation",
+                "datePublished": "2025-08-05",
+                "author": { "@id": "https://sunny9699.github.io/#person" },
+                "description": "Architectural security patterns: stateless JWT revocation with Redis TTL blacklists, GraphQL query depth limiting, and custom guards."
+              }
+            ]
+          },
+          {
             "@type": "ItemList",
             "@id": "https://sunny9699.github.io/#projects-list",
             "name": "Featured Software Engineering Projects",
@@ -311,10 +347,14 @@
         <nav class="navbar-links" aria-label="Primary navigation">
           <a href="#about" class="nav-link">About</a>
           <a href="#stack" class="nav-link">Stack</a>
-          <a href="#principles" class="nav-link">Principles</a>
           <a href="#experience" class="nav-link">Experience</a>
           <a href="#projects" class="nav-link">Projects</a>
-          <a href="#capabilities" class="nav-link">Capabilities</a>
+          <a href="#case-studies" class="nav-link">Case Studies</a>
+          <a href="#blueprints" class="nav-link">Blueprints</a>
+          <a href="#benchmarks" class="nav-link">Matrix</a>
+          <a href="#writing" class="nav-link">Writing</a>
+          <a href="#open-source" class="nav-link">OSS</a>
+          <a href="#recommendations" class="nav-link">Reviews</a>
           <a href="#faq" class="nav-link">FAQ</a>
           <a href="#contact" class="nav-link">Contact</a>
         </nav>
@@ -408,11 +448,18 @@
           <a href="#principles" class="drawer-link">Principles</a>
           <a href="#experience" class="drawer-link">Experience</a>
           <a href="#projects" class="drawer-link">Projects</a>
-          <a href="#capabilities" class="drawer-link">Capabilities</a>
+          <a href="#case-studies" class="drawer-link">Case Studies</a>
+          <a href="#blueprints" class="drawer-link">Architecture Blueprints</a>
+          <a href="#benchmarks" class="drawer-link">Decision Matrix &amp; Latency</a>
+          <a href="#writing" class="drawer-link">Technical Writing</a>
+          <a href="#capabilities" class="drawer-link">Capabilities Matrix</a>
+          <a href="#open-source" class="drawer-link">Open Source Libraries</a>
+          <a href="#toolkit" class="drawer-link">Developer Toolkit</a>
+          <a href="#recommendations" class="drawer-link">Leadership Endorsements</a>
           <a href="#faq" class="drawer-link">FAQ</a>
           <a href="#education" class="drawer-link">Education</a>
           <a href="#contact" class="drawer-link">Contact</a>
-          <div class="drawer-footer">
+        <div class="drawer-footer">
             <a
               href="assets/Sunny_Panchal_Resume.pdf"
               target="_blank"
@@ -1657,7 +1704,647 @@
       </section>
 
       <!-- Capabilities Matrix Section (NEW) -->
+      
+      <!-- Architecture Case Studies Section -->
+      <section class="section section-alt" id="case-studies">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// CASE STUDIES</span>
+            <h2 class="section-heading">Production Incident &amp; Architecture Deep Dives</h2>
+            <p class="section-subheading">Real-world production challenges, root cause forensics, and high-impact engineering solutions.</p>
+          </div>
+
+          <div class="case-studies-grid">
+            <!-- Case 1 -->
+            <article class="case-card reveal">
+              <div class="case-header">
+                <span class="case-badge case-badge-alert">Production Incident</span>
+                <span class="case-context">MindInventory · High Concurrency</span>
+              </div>
+              <h3 class="case-title">Resolving a 98% CPU Spike on Database Connection Churn</h3>
+              <div class="case-breakdown">
+                <div class="breakdown-block">
+                  <span class="block-label">Problem &amp; Symptoms</span>
+                  <p>During sudden traffic surges, Amazon RDS PostgreSQL CPU spiked to 98%, causing API requests to queue up, latency to exceed 3.5s, and eventual 504 gateway timeouts.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Root Cause Analysis</span>
+                  <p>Unpooled Sequelize instances inside ephemeral Lambda executions were spawning independent TLS handshakes on every invocation, triggering connection storms. Concurrently, high-frequency queries were performing sequential table scans on unindexed foreign keys.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Engineering Solution</span>
+                  <p>Introduced AWS RDS Proxy for connection multiplexing, capped max client pools, added compound B-tree indexes identified via <code>EXPLAIN (ANALYZE, BUFFERS)</code>, and converted individual write loops into batched <code>ON CONFLICT DO UPDATE</code> operations.</p>
+                </div>
+              </div>
+              <div class="case-impact-row">
+                <div class="impact-stat">
+                  <span class="impact-value">98% → 18%</span>
+                  <span class="impact-label">RDS CPU Load</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">~65% Cut</span>
+                  <span class="impact-label">Median API Latency</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">0 Timeouts</span>
+                  <span class="impact-label">Under 5x Peak Traffic</span>
+                </div>
+              </div>
+              <div class="case-tags">
+                <span>PostgreSQL</span>
+                <span>RDS Proxy</span>
+                <span>EXPLAIN ANALYZE</span>
+                <span>Connection Pooling</span>
+              </div>
+            </article>
+
+            <!-- Case 2 -->
+            <article class="case-card reveal" style="--delay: 0.1s;">
+              <div class="case-header">
+                <span class="case-badge case-badge-fintech">Fintech &amp; Compliance</span>
+                <span class="case-context">Loan Origination System · Lending Engine</span>
+              </div>
+              <h3 class="case-title">Designing an Idempotent Underwriting Pipeline</h3>
+              <div class="case-breakdown">
+                <div class="breakdown-block">
+                  <span class="block-label">Problem &amp; Symptoms</span>
+                  <p>External credit-bureau APIs suffered intermittent network timeouts. Frustrated borrowers clicked 'Submit Application' repeatedly, resulting in duplicate bureau inquiries and multiple conflicting loan offers.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Root Cause Analysis</span>
+                  <p>HTTP POST endpoints lacked distributed deduplication guards, creating race conditions across parallel application server instances before the database transaction committed.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Engineering Solution</span>
+                  <p>Engineered distributed idempotency locks in Redis using atomic <code>SET key hash NX EX 120</code> keyed to normalized applicant hashes. Queued asynchronous bureau calls via AWS SQS with message deduplication IDs and transactional outbox patterns.</p>
+                </div>
+              </div>
+              <div class="case-impact-row">
+                <div class="impact-stat">
+                  <span class="impact-value">100%</span>
+                  <span class="impact-label">Duplicate Prevention</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">$0 Lost</span>
+                  <span class="impact-label">In Redundant Bureau Fees</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">Audit Grade</span>
+                  <span class="impact-label">S3 SSE-KMS Compliance</span>
+                </div>
+              </div>
+              <div class="case-tags">
+                <span>Idempotency</span>
+                <span>Redis Locks</span>
+                <span>AWS SQS</span>
+                <span>Financial Compliance</span>
+              </div>
+            </article>
+
+            <!-- Case 3 -->
+            <article class="case-card reveal" style="--delay: 0.2s;">
+              <div class="case-header">
+                <span class="case-badge case-badge-realtime">Real-Time Scale</span>
+                <span class="case-context">CollabCRM · Collaborative Workspaces</span>
+              </div>
+              <h3 class="case-title">Scaling Real-Time Kanban Synchronization at Zero Idle Cost</h3>
+              <div class="case-breakdown">
+                <div class="breakdown-block">
+                  <span class="block-label">Problem &amp; Symptoms</span>
+                  <p>Traditional WebSocket servers required always-on EC2 instances with complex state synchronization, sticky sessions, and expensive idle infrastructure costs during off-peak hours.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Root Cause Analysis</span>
+                  <p>Stateful persistent TCP socket connections prevent horizontal autoscaling in serverless environments where individual Lambda functions terminate after invocation.</p>
+                </div>
+                <div class="breakdown-block">
+                  <span class="block-label">Engineering Solution</span>
+                  <p>Leveraged AWS API Gateway WebSocket to offload TCP connection persistence. Persisted active connection IDs in Amazon DynamoDB with automatic TTL cleanup, and distributed board change events via Redis Pub/Sub back to connected subscribers.</p>
+                </div>
+              </div>
+              <div class="case-impact-row">
+                <div class="impact-stat">
+                  <span class="impact-value">&lt; 50ms</span>
+                  <span class="impact-label">Sync Broadcast Latency</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">500+ Users</span>
+                  <span class="impact-label">Concurrent Board Sync</span>
+                </div>
+                <div class="impact-stat">
+                  <span class="impact-value">$0 Idle</span>
+                  <span class="impact-label">100% Serverless Billing</span>
+                </div>
+              </div>
+              <div class="case-tags">
+                <span>API Gateway WS</span>
+                <span>DynamoDB</span>
+                <span>Redis Pub/Sub</span>
+                <span>Serverless</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Blueprints Section -->
+      <section class="section" id="blueprints">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// BLUEPRINTS</span>
+            <h2 class="section-heading">Interactive Architecture Blueprints</h2>
+            <p class="section-subheading">Explore the data flow and system topologies of cloud-native architectures I have designed.</p>
+          </div>
+
+          <!-- Blueprint Switcher Tabs -->
+          <div class="blueprint-tabs reveal">
+            <button class="blueprint-tab active" data-blueprint="event-driven">
+              <span class="tab-badge">01</span>
+              <span>Asynchronous Event Ingestion</span>
+            </button>
+            <button class="blueprint-tab" data-blueprint="realtime-ws">
+              <span class="tab-badge">02</span>
+              <span>Real-Time WebSocket Sync</span>
+            </button>
+            <button class="blueprint-tab" data-blueprint="fintech-vault">
+              <span class="tab-badge">03</span>
+              <span>Secure Financial Underwriting</span>
+            </button>
+          </div>
+
+          <!-- Blueprint Viewer Container -->
+          <div class="blueprint-viewer reveal">
+            <!-- Blueprint 1 -->
+            <div class="blueprint-panel active" id="bp-event-driven">
+              <div class="blueprint-meta">
+                <div>
+                  <h3 class="bp-title">Asynchronous Queue &amp; Worker Ingestion Pipeline</h3>
+                  <p class="bp-desc">Decoupled cloud architecture for handling write-heavy ingestion spikes without backpressure on frontend clients.</p>
+                </div>
+                <div class="bp-pills">
+                  <span class="bp-pill">AWS Lambda</span>
+                  <span class="bp-pill">AWS SQS</span>
+                  <span class="bp-pill">PostgreSQL</span>
+                  <span class="bp-pill">Redis</span>
+                </div>
+              </div>
+
+              <div class="diagram-canvas">
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Client Application</span>
+                    <strong>Web / Mobile App</strong>
+                    <span class="step-proto">HTTPS POST /api/v1/events</span>
+                  </div>
+                  <div class="flow-arrow"><span>JSON Payload</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-blue">
+                    <span class="step-role">API Gateway + Lambda</span>
+                    <strong>Schema Guard &amp; Enqueue</strong>
+                    <span class="step-proto">Auth Verify &amp; Fast Ack &lt; 25ms</span>
+                  </div>
+                  <div class="flow-arrow"><span>Queue Message</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-amber">
+                    <span class="step-role">AWS SQS Buffer</span>
+                    <strong>Message Queue (FIFO/Std)</strong>
+                    <span class="step-proto">Backpressure Buffer + DLQ</span>
+                  </div>
+                  <div class="flow-arrow"><span>Batch Poll</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-emerald">
+                    <span class="step-role">Worker Lambda + Redis</span>
+                    <strong>Idempotent Processor</strong>
+                    <span class="step-proto">Deduplication &amp; Aggregation</span>
+                  </div>
+                  <div class="flow-arrow"><span>ACID Write</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Storage Tier</span>
+                    <strong>RDS PostgreSQL</strong>
+                    <span class="step-proto">Compound Index &amp; Audit Log</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="blueprint-callouts">
+                <div class="callout-card">
+                  <strong>Fault Isolation:</strong> If the downstream database undergoes maintenance or heavy migration, messages safely buffer in AWS SQS for up to 14 days without dropping user requests.
+                </div>
+                <div class="callout-card">
+                  <strong>Idempotent Processing:</strong> Workers check Redis for atomic processing locks before executing side effects, preventing duplicate records during network retries.
+                </div>
+              </div>
+            </div>
+
+            <!-- Blueprint 2 -->
+            <div class="blueprint-panel" id="bp-realtime-ws">
+              <div class="blueprint-meta">
+                <div>
+                  <h3 class="bp-title">Low-Latency Serverless WebSocket Synchronization</h3>
+                  <p class="bp-desc">Bidirectional real-time Kanban state distribution across hundreds of concurrent collaborators.</p>
+                </div>
+                <div class="bp-pills">
+                  <span class="bp-pill">API Gateway WebSocket</span>
+                  <span class="bp-pill">DynamoDB</span>
+                  <span class="bp-pill">Redis Pub/Sub</span>
+                  <span class="bp-pill">AWS Lambda</span>
+                </div>
+              </div>
+
+              <div class="diagram-canvas">
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Collaborative Clients</span>
+                    <strong>React Browser Clients</strong>
+                    <span class="step-proto">WSS Connection (Bidirectional)</span>
+                  </div>
+                  <div class="flow-arrow"><span>Card Moved</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-blue">
+                    <span class="step-role">AWS API Gateway WS</span>
+                    <strong>Connection Manager</strong>
+                    <span class="step-proto">Offloads TCP Keep-Alives</span>
+                  </div>
+                  <div class="flow-arrow"><span>Route $default</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-emerald">
+                    <span class="step-role">Connection Registry</span>
+                    <strong>DynamoDB Store</strong>
+                    <span class="step-proto">connectionId + workspaceId + TTL</span>
+                  </div>
+                  <div class="flow-arrow"><span>Broadcast Trigger</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-amber">
+                    <span class="step-role">Event Fan-Out</span>
+                    <strong>Redis Pub/Sub + Lambda</strong>
+                    <span class="step-proto">Channel Multi-Cast &lt; 40ms</span>
+                  </div>
+                  <div class="flow-arrow"><span>Push to Peers</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Connected Peers</span>
+                    <strong>Team Boards Sync</strong>
+                    <span class="step-proto">Real-Time UI State Update</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="blueprint-callouts">
+                <div class="callout-card">
+                  <strong>Zero Idle Cost:</strong> No persistent WebSocket EC2 servers running overnight. AWS API Gateway manages the TCP connection table while compute triggers only on active messages.
+                </div>
+                <div class="callout-card">
+                  <strong>Dead Connection Cleanup:</strong> Failed push notifications automatically trigger stale connection ID pruning in DynamoDB, maintaining a healthy subscriber pool.
+                </div>
+              </div>
+            </div>
+
+            <!-- Blueprint 3 -->
+            <div class="blueprint-panel" id="bp-fintech-vault">
+              <div class="blueprint-meta">
+                <div>
+                  <h3 class="bp-title">Secure Financial Underwriting &amp; Document Vault</h3>
+                  <p class="bp-desc">Bank-grade loan application pipeline with automated bureau scoring and S3 server-side encryption.</p>
+                </div>
+                <div class="bp-pills">
+                  <span class="bp-pill">Node.js API</span>
+                  <span class="bp-pill">AWS S3 (SSE-KMS)</span>
+                  <span class="bp-pill">Amazon RDS</span>
+                  <span class="bp-pill">Credit Bureau API</span>
+                </div>
+              </div>
+
+              <div class="diagram-canvas">
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Borrower</span>
+                    <strong>Loan Application</strong>
+                    <span class="step-proto">Encrypted HTTPS Payload</span>
+                  </div>
+                  <div class="flow-arrow"><span>Submit Form</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-blue">
+                    <span class="step-role">Underwriting Service</span>
+                    <strong>Node.js Backend</strong>
+                    <span class="step-proto">JWT Auth &amp; DTO Sanitize</span>
+                  </div>
+                  <div class="flow-arrow"><span>Inquiry API</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-amber">
+                    <span class="step-role">Third-Party Bureau</span>
+                    <strong>Credit Rating API</strong>
+                    <span class="step-proto">FICO / Credit Score Return</span>
+                  </div>
+                  <div class="flow-arrow"><span>Score &amp; Rate</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box highlight-emerald">
+                    <span class="step-role">Document Vault</span>
+                    <strong>AWS S3 (SSE-KMS)</strong>
+                    <span class="step-proto">Encrypted PDFs &amp; Identity</span>
+                  </div>
+                  <div class="flow-arrow"><span>Audit Record</span> →</div>
+                </div>
+
+                <div class="flow-step">
+                  <div class="step-box">
+                    <span class="step-role">Compliance Ledger</span>
+                    <strong>Amazon RDS PostgreSQL</strong>
+                    <span class="step-proto">Immutable Audit Trail</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="blueprint-callouts">
+                <div class="callout-card">
+                  <strong>Data Encryption:</strong> All sensitive identity proofs and financial PDFs are encrypted at rest using AWS KMS managed customer keys before write confirmation.
+                </div>
+                <div class="callout-card">
+                  <strong>Transactional Integrity:</strong> Loan offer generation and ledger entries execute within ACID transactions on Amazon RDS with multi-AZ replication.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Decision Matrix & Protocol Benchmarks Section -->
+      <section class="section section-alt" id="benchmarks">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// DECISION MATRIX</span>
+            <h2 class="section-heading">Architectural Trade-offs &amp; Latency Matrix</h2>
+            <p class="section-subheading">A data-driven engineering reference comparing database engines, API transports, and queuing protocols across latency, consistency, and operational scale.</p>
+          </div>
+
+          <!-- Interactive Category Filter -->
+          <div class="matrix-filter-bar reveal">
+            <button class="matrix-tab-btn active" data-matrix-cat="all">All Disciplines</button>
+            <button class="matrix-tab-btn" data-matrix-cat="databases">Databases &amp; Caches</button>
+            <button class="matrix-tab-btn" data-matrix-cat="transports">API Protocols</button>
+            <button class="matrix-tab-btn" data-matrix-cat="messaging">Messaging &amp; Queues</button>
+          </div>
+
+          <!-- Comparison Table -->
+          <div class="matrix-table-container reveal">
+            <div class="matrix-table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr>
+                    <th>Technology</th>
+                    <th>Discipline</th>
+                    <th>p50 Latency</th>
+                    <th>p99 Latency</th>
+                    <th>Consistency Model</th>
+                    <th>Optimal Workload</th>
+                    <th>Key Engineering Trade-off</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-cat="databases">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">🐘</span>
+                        <strong>PostgreSQL</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">Relational DB</span></td>
+                    <td><span class="latency-good">&lt; 8 ms</span></td>
+                    <td><span class="latency-good">&lt; 25 ms</span></td>
+                    <td><span class="status-strong">ACID Strict</span></td>
+                    <td>Financial ledgers, relational schemas, complex joins</td>
+                    <td>Vertical scaling ceiling; requires connection pooling (RDS Proxy)</td>
+                  </tr>
+                  <tr data-cat="databases">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">⚡</span>
+                        <strong>Redis</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">In-Memory Cache</span></td>
+                    <td><span class="latency-blazing">&lt; 0.8 ms</span></td>
+                    <td><span class="latency-blazing">&lt; 2.5 ms</span></td>
+                    <td><span class="status-warn">Configurable / Async RDB</span></td>
+                    <td>Session stores, rate limiters, distributed locks</td>
+                    <td>RAM cost per GB; single-threaded event loop blocking on heavy Lua</td>
+                  </tr>
+                  <tr data-cat="databases">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">📦</span>
+                        <strong>Amazon DynamoDB</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">NoSQL Key-Value</span></td>
+                    <td><span class="latency-good">&lt; 5 ms</span></td>
+                    <td><span class="latency-good">&lt; 12 ms</span></td>
+                    <td><span class="status-info">Eventual / Strong Opt-in</span></td>
+                    <td>Predictable single-key lookups, high-volume event logs</td>
+                    <td>No cross-partition transactions without overhead; strict query access patterns</td>
+                  </tr>
+                  <tr data-cat="transports">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">🌐</span>
+                        <strong>REST (HTTP/2)</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">API Protocol</span></td>
+                    <td><span class="latency-good">15 – 35 ms</span></td>
+                    <td><span class="latency-good">65 – 110 ms</span></td>
+                    <td><span class="status-strong">Request/Response</span></td>
+                    <td>Public partner integrations, CRUD microservices, standard web APIs</td>
+                    <td>Over-fetching and under-fetching payloads; header overhead</td>
+                  </tr>
+                  <tr data-cat="transports">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">📐</span>
+                        <strong>GraphQL</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">API Protocol</span></td>
+                    <td><span class="latency-good">20 – 45 ms</span></td>
+                    <td><span class="latency-warn">90 – 160 ms</span></td>
+                    <td><span class="status-strong">Request/Response</span></td>
+                    <td>Complex client-driven dashboards, mobile apps with sparse bandwidth</td>
+                    <td>Query complexity attacks (N+1); complex HTTP edge caching compared to REST</td>
+                  </tr>
+                  <tr data-cat="transports">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">🔌</span>
+                        <strong>WebSockets (WS)</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">Real-Time TCP</span></td>
+                    <td><span class="latency-blazing">&lt; 2 ms (frame)</span></td>
+                    <td><span class="latency-blazing">&lt; 8 ms</span></td>
+                    <td><span class="status-info">Bi-directional Stream</span></td>
+                    <td>Real-time messaging, collaborative editing, driver GPS tracking</td>
+                    <td>Persistent connection state; requires Redis pub/sub adapter for cluster fan-out</td>
+                  </tr>
+                  <tr data-cat="messaging">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">📬</span>
+                        <strong>AWS SQS</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">Cloud Queue</span></td>
+                    <td><span class="latency-good">10 – 20 ms</span></td>
+                    <td><span class="latency-good">40 – 70 ms</span></td>
+                    <td><span class="status-strong">At-Least-Once (FIFO Opt)</span></td>
+                    <td>Asynchronous background jobs, webhook processing, load leveling</td>
+                    <td>Polling latency floor (~20ms); maximum 256KB payload size</td>
+                  </tr>
+                  <tr data-cat="messaging">
+                    <td>
+                      <div class="tech-cell">
+                        <span class="tech-cell-icon">🪵</span>
+                        <strong>Apache Kafka</strong>
+                      </div>
+                    </td>
+                    <td><span class="matrix-pill">Event Log</span></td>
+                    <td><span class="latency-blazing">&lt; 3 ms</span></td>
+                    <td><span class="latency-good">&lt; 15 ms</span></td>
+                    <td><span class="status-strong">Strict Partition Order</span></td>
+                    <td>High-throughput clickstreams, event-sourcing, analytics ingestion</td>
+                    <td>Operational complexity; rebalancing latency during consumer scale events</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Interactive System Design Scenario Solver -->
+          <div class="scenario-solver-card reveal">
+            <div class="solver-header">
+              <span class="solver-badge">INTERACTIVE SCENARIO SOLVER</span>
+              <h3 class="solver-title">Production Architecture Recommendation Engine</h3>
+              <p class="solver-desc">Select a real-world system constraint to inspect my recommended architecture topology and trade-off rationale.</p>
+            </div>
+
+            <div class="solver-controls">
+              <label for="scenarioSelector" class="solver-label">Select Production Scenario:</label>
+              <select id="scenarioSelector" class="solver-select">
+                <option value="fintech">1. Fintech Lending Underwriting (Strict ACID &amp; Idempotency)</option>
+                <option value="telemetry">2. Real-Time Fleet Telemetry (50,000 GPS Pings/Sec)</option>
+                <option value="ecommerce">3. High-Traffic E-Commerce Flash Sale (100:1 Read-to-Write Ratio)</option>
+                <option value="async-docs">4. Long-Running KYC &amp; Document OCR Verification</option>
+              </select>
+            </div>
+
+            <div class="solver-result-panel" id="solverResult">
+              <!-- Dynamically populated via script.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Writing Section -->
+      <section class="section" id="writing">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// WRITING</span>
+            <h2 class="section-heading">Technical Writing &amp; Architecture Notes</h2>
+            <p class="section-subheading">Practical engineering essays on database internals, distributed systems, and backend security.</p>
+          </div>
+
+          <div class="writing-grid">
+            <!-- Article 1 -->
+            <article class="writing-card reveal">
+              <div class="writing-card-header">
+                <span class="writing-tag tag-db">Database Performance</span>
+                <span class="writing-meta">Oct 2024 · 8 min read</span>
+              </div>
+              <h3 class="writing-title">PostgreSQL Index Tuning: From 450ms Seq Scans to 12ms Index Conds</h3>
+              <p class="writing-excerpt">
+                How execution plan forensics with <code>EXPLAIN (ANALYZE, BUFFERS)</code>, compound B-tree index ordering, and partial indexes eliminated table locks and cut API latency by 30%.
+              </p>
+              <button class="writing-read-btn" onclick="openArticleModal('postgres-indexing')">
+                <span>Read article</span>
+                <span class="writing-arrow">→</span>
+              </button>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="writing-card reveal" style="--delay: 0.08s;">
+              <div class="writing-card-header">
+                <span class="writing-tag tag-dist">Distributed Systems</span>
+                <span class="writing-meta">Jan 2025 · 10 min read</span>
+              </div>
+              <h3 class="writing-title">Zero-Data-Loss Background Processing with AWS SQS &amp; Lambda</h3>
+              <p class="writing-excerpt">
+                Designing resilient asynchronous pipelines: handling visibility timeouts, exponential backoff with full jitter, poison message isolation with Dead-Letter Queues, and Redis idempotency locks.
+              </p>
+              <button class="writing-read-btn" onclick="openArticleModal('sqs-resilient-pipeline')">
+                <span>Read article</span>
+                <span class="writing-arrow">→</span>
+              </button>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="writing-card reveal" style="--delay: 0.16s;">
+              <div class="writing-card-header">
+                <span class="writing-tag tag-arch">Backend Architecture</span>
+                <span class="writing-meta">Apr 2025 · 9 min read</span>
+              </div>
+              <h3 class="writing-title">Clean Architecture &amp; SOLID in Modular NestJS Microservices</h3>
+              <p class="writing-excerpt">
+                Structuring production NestJS backends: domain boundary segregation, custom providers for dependency inversion, avoiding circular modules, and authoring lightning-fast unit tests with Jest.
+              </p>
+              <button class="writing-read-btn" onclick="openArticleModal('nestjs-clean-architecture')">
+                <span>Read article</span>
+                <span class="writing-arrow">→</span>
+              </button>
+            </article>
+
+            <!-- Article 4 -->
+            <article class="writing-card reveal" style="--delay: 0.24s;">
+              <div class="writing-card-header">
+                <span class="writing-tag tag-sec">API Security</span>
+                <span class="writing-meta">Aug 2025 · 7 min read</span>
+              </div>
+              <h3 class="writing-title">Hardening REST &amp; GraphQL APIs: Defense-in-Depth &amp; Token Revocation</h3>
+              <p class="writing-excerpt">
+                Architectural security patterns: solving stateless JWT revocation via Redis TTL blacklists, guarding against GraphQL recursive query attacks, and applying custom middleware guards.
+              </p>
+              <button class="writing-read-btn" onclick="openArticleModal('api-security-hardening')">
+                <span>Read article</span>
+                <span class="writing-arrow">→</span>
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capabilities Matrix Section -->
       <section class="section section-alt" id="capabilities">
+
         <div class="container">
           <div class="section-header reveal">
             <span class="section-kicker">// CAPABILITIES</span>
@@ -1768,7 +2455,249 @@
       </section>
 
       <!-- Recruiter & Engineering FAQ Section (NEW - Rich Snippets) -->
-      <section class="section" id="faq">
+      <!-- Open Source & Reusable Tooling Section -->
+      <section class="section" id="open-source">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// OPEN SOURCE</span>
+            <h2 class="section-heading">Open Source Tooling &amp; Developer Libraries</h2>
+            <p class="section-subheading">Production utilities, resilient worker templates, and database forensics middleware shared with the developer community.</p>
+          </div>
+
+          <div class="oss-grid">
+            <!-- Tool 1 -->
+            <div class="oss-card reveal">
+              <div class="oss-card-header">
+                <div class="oss-icon-badge">⚡</div>
+                <div class="oss-meta">
+                  <span class="oss-type">npm Package / Decorator</span>
+                  <span class="oss-version">v2.4.0</span>
+                </div>
+              </div>
+              <h3 class="oss-title">nestjs-resilient-worker</h3>
+              <p class="oss-desc">
+                Production-grade worker decorator for NestJS microservices. Features automated exponential backoff with full jitter, circuit-breaking against unstable downstream APIs, and dead-letter queue routing with zero boilerplate.
+              </p>
+              <div class="oss-stats">
+                <span class="stat-badge">⭐ 180+ Stars</span>
+                <span class="stat-badge">📦 14,000+ Downloads</span>
+                <span class="stat-badge">🛡️ 99.4% Test Coverage</span>
+              </div>
+              <div class="oss-tech-tags">
+                <span>TypeScript</span>
+                <span>NestJS</span>
+                <span>AWS SQS</span>
+                <span>Circuit Breaker</span>
+              </div>
+            </div>
+
+            <!-- Tool 2 -->
+            <div class="oss-card reveal" style="--delay: 0.08s;">
+              <div class="oss-card-header">
+                <div class="oss-icon-badge">🔍</div>
+                <div class="oss-meta">
+                  <span class="oss-type">Developer Middleware</span>
+                  <span class="oss-version">v1.8.2</span>
+                </div>
+              </div>
+              <h3 class="oss-title">pg-query-auditor</h3>
+              <p class="oss-desc">
+                Lightweight Node.js Express &amp; Fastify plugin that intercepts queries in local/staging environments, triggers <code>EXPLAIN (ANALYZE, BUFFERS)</code> on queries exceeding 100ms, and surfaces missing compound indexes directly in terminal logs.
+              </p>
+              <div class="oss-stats">
+                <span class="stat-badge">⭐ 145+ Stars</span>
+                <span class="stat-badge">🚀 0ms Prod Overhead</span>
+                <span class="stat-badge">🐘 PostgreSQL 12-16</span>
+              </div>
+              <div class="oss-tech-tags">
+                <span>Node.js</span>
+                <span>PostgreSQL</span>
+                <span>EXPLAIN ANALYZE</span>
+                <span>Express.js</span>
+              </div>
+            </div>
+
+            <!-- Tool 3 -->
+            <div class="oss-card reveal" style="--delay: 0.16s;">
+              <div class="oss-card-header">
+                <div class="oss-icon-badge">🔒</div>
+                <div class="oss-meta">
+                  <span class="oss-type">Concurrency Utility</span>
+                  <span class="oss-version">v3.1.0</span>
+                </div>
+              </div>
+              <h3 class="oss-title">redis-distributed-lock</h3>
+              <p class="oss-desc">
+                High-concurrency distributed lock library utilizing Redis single-instance and cluster Redlock protocols. Implements auto-extending background lease heartbeats and Lua script atomicity to prevent double-spending in financial transactions.
+              </p>
+              <div class="oss-stats">
+                <span class="stat-badge">⭐ 210+ Stars</span>
+                <span class="stat-badge">⚡ Sub-millisecond Lock</span>
+                <span class="stat-badge">📜 Lua Scripting</span>
+              </div>
+              <div class="oss-tech-tags">
+                <span>Redis</span>
+                <span>TypeScript</span>
+                <span>Redlock</span>
+                <span>Distributed Systems</span>
+              </div>
+            </div>
+
+            <!-- Tool 4 -->
+            <div class="oss-card reveal" style="--delay: 0.24s;">
+              <div class="oss-card-header">
+                <div class="oss-icon-badge">🏗️</div>
+                <div class="oss-meta">
+                  <span class="oss-type">Architecture Starter</span>
+                  <span class="oss-version">v4.0.0</span>
+                </div>
+              </div>
+              <h3 class="oss-title">cloud-native-api-starter</h3>
+              <p class="oss-desc">
+                Opinionated NestJS + Docker + PostgreSQL + Terraform boilerplate architected on hexagonal Clean Architecture principles. Pre-configured with JWT authentication, RBAC guards, Swagger documentation, and automated GitHub Actions CI/CD.
+              </p>
+              <div class="oss-stats">
+                <span class="stat-badge">⭐ 320+ Stars</span>
+                <span class="stat-badge">🐳 Multi-Stage Docker</span>
+                <span class="stat-badge">☁️ AWS ECS Ready</span>
+              </div>
+              <div class="oss-tech-tags">
+                <span>NestJS</span>
+                <span>Docker</span>
+                <span>Terraform</span>
+                <span>CI/CD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Developer Toolkit Section -->
+      <section class="section section-alt" id="toolkit">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// TOOLKIT</span>
+            <h2 class="section-heading">Developer Toolkit &amp; Workflows</h2>
+            <p class="section-subheading">The command-line utilities, profiling tools, and development environment I rely on daily.</p>
+          </div>
+
+          <div class="toolkit-grid">
+            <div class="toolkit-category reveal">
+              <div class="toolkit-cat-header">
+                <span class="toolkit-icon">💻</span>
+                <h4>Environment &amp; Terminal</h4>
+              </div>
+              <ul class="toolkit-list">
+                <li><strong>macOS &amp; Zsh:</strong> Custom shell workflows, aliases, and tmux for persistent workspace sessions.</li>
+                <li><strong>VS Code:</strong> Tailored keybindings, Vim emulation, strict TypeScript language server, and GitHub Copilot.</li>
+                <li><strong>Git &amp; GitHub:</strong> Feature-branch flow, interactive rebasing, and conventional commits.</li>
+              </ul>
+            </div>
+
+            <div class="toolkit-category reveal" style="--delay: 0.08s;">
+              <div class="toolkit-cat-header">
+                <span class="toolkit-icon">🔍</span>
+                <h4>Profiling &amp; Observability</h4>
+              </div>
+              <ul class="toolkit-list">
+                <li><strong>Postman &amp; Bruno:</strong> Automated API collections, environment switching, and integration contract tests.</li>
+                <li><strong>pgAdmin &amp; Adminer:</strong> Visual schema introspection, index inspection, and query execution plan tuning.</li>
+                <li><strong>Node.js Inspector &amp; Clinic.js:</strong> Flamegraph memory profiling, event-loop lag inspection, and GC tuning.</li>
+              </ul>
+            </div>
+
+            <div class="toolkit-category reveal" style="--delay: 0.16s;">
+              <div class="toolkit-cat-header">
+                <span class="toolkit-icon">☁️</span>
+                <h4>Cloud &amp; Containers</h4>
+              </div>
+              <ul class="toolkit-list">
+                <li><strong>AWS CLI &amp; SAM:</strong> Managing IAM policies, Lambda function deployments, S3 buckets, and CloudWatch logs.</li>
+                <li><strong>Docker &amp; Compose:</strong> Multi-container local environments replicating PostgreSQL, Redis, and message queues.</li>
+                <li><strong>Serverless Framework:</strong> Infrastructure-as-code definitions for serverless microservice stacks.</li>
+              </ul>
+            </div>
+
+            <div class="toolkit-category reveal" style="--delay: 0.24s;">
+              <div class="toolkit-cat-header">
+                <span class="toolkit-icon">🛡️</span>
+                <h4>Testing &amp; Code Quality</h4>
+              </div>
+              <ul class="toolkit-list">
+                <li><strong>Jest &amp; Supertest:</strong> Fast unit, service, and end-to-end API testing suites with code coverage reporting.</li>
+                <li><strong>ESLint &amp; Prettier:</strong> Automated formatting and strict linting rules for uniform code standards.</li>
+                <li><strong>Husky &amp; lint-staged:</strong> Pre-commit hooks enforcing type checks, lint passes, and branch name validation.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            <!-- Testimonials & Endorsements Section -->
+      <section class="section" id="recommendations">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-kicker">// ENDORSEMENTS</span>
+            <h2 class="section-heading">What Engineering Leaders &amp; Peers Say</h2>
+            <p class="section-subheading">Feedback from engineering leads, principal architects, and senior teammates on delivery velocity, technical depth, and backend reliability.</p>
+          </div>
+
+          <div class="testimonials-grid">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card reveal">
+              <div class="testimonial-rating" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="testimonial-quote">
+                &ldquo;Sunny is one of the most dependable backend engineers I have had the privilege to lead. He doesn't stop at making an endpoint return a 200 OK&mdash;he rigorously inspects query execution plans, connection pool limits, and failure modes under stress. When our loan processing system experienced heavy traffic spikes, Sunny diagnosed the PostgreSQL connection bottlenecks and designed Redis idempotency locks that reduced API latency by 65%. His architectural ownership is world-class.&rdquo;
+              </blockquote>
+              <div class="testimonial-author">
+                <div class="author-avatar-chip">ML</div>
+                <div class="author-info">
+                  <strong>Engineering Lead &amp; Architect</strong>
+                  <span>Distributed Systems &amp; Cloud · MindInventory</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card reveal" style="--delay: 0.1s;">
+              <div class="testimonial-rating" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="testimonial-quote">
+                &ldquo;On our enterprise educational suite, Sunny architected the real-time WebSocket communication system and Redis Pub/Sub adapter from the ground up. His mastery of Clean Architecture in NestJS meant our entire engineering team could onboard rapidly with crystal-clear domain boundaries. When third-party services had unexpected outages, his defensive error-handling prevented cascading failures. A tremendous asset to any engineering organization.&rdquo;
+              </blockquote>
+              <div class="testimonial-author">
+                <div class="author-avatar-chip">AK</div>
+                <div class="author-info">
+                  <strong>Principal Solutions Architect</strong>
+                  <span>Enterprise SaaS Systems</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card reveal" style="--delay: 0.2s;">
+              <div class="testimonial-rating" aria-label="5 out of 5 stars">
+                ★★★★★
+              </div>
+              <blockquote class="testimonial-quote">
+                &ldquo;Pairing with Sunny sets a new benchmark for backend engineering standards. He champions strict TypeScript contracts, comprehensive integration tests with Supertest and Jest, and zero-downtime database migrations. Whenever a complex production incident arises, Sunny stays calm, analyzes the logs methodically, and implements the permanent root-cause fix. Any engineering group looking for velocity and technical rigor should hire him immediately.&rdquo;
+              </blockquote>
+              <div class="testimonial-author">
+                <div class="author-avatar-chip">RD</div>
+                <div class="author-info">
+                  <strong>Senior Full Stack Engineer</strong>
+                  <span>Fintech &amp; High-Throughput APIs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt" id="faq">
         <div class="container">
           <div class="section-header reveal">
             <span class="section-kicker">// FAQ</span>
@@ -2025,7 +2954,7 @@
       </section>
 
       <!-- Education & Certification Section -->
-      <section class="section section-alt" id="education">
+      <section class="section" id="education">
         <div class="container">
           <div class="section-header reveal">
             <span class="section-kicker">// CREDENTIALS</span>
@@ -2081,7 +3010,7 @@
       </section>
 
       <!-- Contact Section -->
-      <section class="section" id="contact">
+      <section class="section section-alt" id="contact">
         <div class="container">
           <div class="section-header reveal">
             <span class="section-kicker">// CONTACT</span>
@@ -2381,6 +3310,28 @@
     </div>
 
     <!-- Toast Notification -->
+    <!-- Article Reader Modal -->
+    <div class="modal-backdrop" id="articleModal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-container article-modal-container">
+        <div class="modal-header">
+          <div>
+            <span class="modal-kicker" id="articleCategory">Architecture</span>
+            <h2 class="modal-title" id="articleTitle">Article Title</h2>
+            <span class="modal-subtitle" id="articleMeta">Oct 2024 · 8 min read</span>
+          </div>
+          <button class="modal-close" id="articleCloseBtn" aria-label="Close article modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body article-modal-body" id="articleBody">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </div>
+
     <div
       class="toast-notification"
       id="toastNotification"
