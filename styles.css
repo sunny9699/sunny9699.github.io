@@ -2489,31 +2489,24 @@ button {
   color: var(--text-primary);
 }
 
-/* Diagram Canvas */
+/* Diagram Canvas - 9-Column Grid for Desktop & 13-inch Screens */
 .diagram-canvas {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(110px, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   padding: 24px 16px;
   border-radius: 14px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-card);
   margin-bottom: 24px;
   overflow-x: auto;
-}
-
-.flow-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 150px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .step-box {
-  flex: 1;
-  padding: 16px 14px;
+  width: 100%;
+  padding: 14px 10px;
   border-radius: 12px;
   background-color: var(--bg-card);
   border: 1px solid var(--border-card);
@@ -2522,6 +2515,7 @@ button {
   flex-direction: column;
   gap: 4px;
   text-align: center;
+  min-width: 0;
   transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -2532,23 +2526,29 @@ button {
 
 .step-role {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text-dim);
   letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .step-box strong {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.3;
 }
 
 .step-proto {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--text-muted);
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 .step-box.highlight-blue {
@@ -2570,10 +2570,31 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.arrow-label {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-dim);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--text-muted);
   white-space: nowrap;
+  line-height: 1.2;
+  margin-bottom: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+}
+
+.arrow-icon {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-dim);
+  font-weight: 600;
 }
 
 .blueprint-callouts {
@@ -3409,6 +3430,69 @@ button {
   .solver-result-panel {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Interactive Blueprints responsive vertical flow at 960px */
+  .blueprint-viewer {
+    padding: 24px 18px;
+  }
+
+  .blueprint-meta {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .blueprint-callouts {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-canvas {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 20px 16px;
+  }
+
+  .step-box {
+    width: 100%;
+    padding: 16px 14px;
+  }
+
+  .flow-arrow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .arrow-label {
+    margin-bottom: 0;
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .arrow-icon {
+    transform: rotate(90deg);
+  }
+
+  .blueprint-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    gap: 8px;
+    scrollbar-width: none;
+  }
+
+  .blueprint-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .blueprint-tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -3483,55 +3567,6 @@ button {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-  }
-
-  /* Interactive Blueprints responsive flow at 768px */
-  .blueprint-viewer {
-    padding: 20px 16px;
-  }
-
-  .blueprint-meta {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .blueprint-callouts {
-    grid-template-columns: 1fr;
-  }
-
-  .diagram-canvas {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px 12px;
-  }
-
-  .flow-step {
-    flex-direction: column;
-    min-width: 0;
-    width: 100%;
-  }
-
-  .flow-arrow {
-    transform: rotate(90deg);
-    margin: 8px 0;
-  }
-
-  .blueprint-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 8px;
-    gap: 8px;
-    scrollbar-width: none;
-  }
-
-  .blueprint-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .blueprint-tab {
-    flex-shrink: 0;
-    white-space: nowrap;
   }
 
   /* Case study impact row */

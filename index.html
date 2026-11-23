@@ -1885,48 +1885,54 @@
               </div>
 
               <div class="diagram-canvas">
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Client Application</span>
-                    <strong>Web / Mobile App</strong>
-                    <span class="step-proto">HTTPS POST /api/v1/events</span>
-                  </div>
-                  <div class="flow-arrow"><span>JSON Payload</span> →</div>
+                <div class="step-box">
+                  <span class="step-role">Client Application</span>
+                  <strong>Web / Mobile App</strong>
+                  <span class="step-proto">HTTPS POST /api/v1/events</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-blue">
-                    <span class="step-role">API Gateway + Lambda</span>
-                    <strong>Schema Guard &amp; Enqueue</strong>
-                    <span class="step-proto">Auth Verify &amp; Fast Ack &lt; 25ms</span>
-                  </div>
-                  <div class="flow-arrow"><span>Queue Message</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">JSON Payload</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-amber">
-                    <span class="step-role">AWS SQS Buffer</span>
-                    <strong>Message Queue (FIFO/Std)</strong>
-                    <span class="step-proto">Backpressure Buffer + DLQ</span>
-                  </div>
-                  <div class="flow-arrow"><span>Batch Poll</span> →</div>
+                <div class="step-box highlight-blue">
+                  <span class="step-role">API Gateway + Lambda</span>
+                  <strong>Schema Guard &amp; Enqueue</strong>
+                  <span class="step-proto">Auth Verify &amp; Fast Ack &lt; 25ms</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-emerald">
-                    <span class="step-role">Worker Lambda + Redis</span>
-                    <strong>Idempotent Processor</strong>
-                    <span class="step-proto">Deduplication &amp; Aggregation</span>
-                  </div>
-                  <div class="flow-arrow"><span>ACID Write</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Queue Message</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Storage Tier</span>
-                    <strong>RDS PostgreSQL</strong>
-                    <span class="step-proto">Compound Index &amp; Audit Log</span>
-                  </div>
+                <div class="step-box highlight-amber">
+                  <span class="step-role">AWS SQS Buffer</span>
+                  <strong>Message Queue (FIFO/Std)</strong>
+                  <span class="step-proto">Backpressure Buffer + DLQ</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Batch Poll</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box highlight-emerald">
+                  <span class="step-role">Worker Lambda + Redis</span>
+                  <strong>Idempotent Processor</strong>
+                  <span class="step-proto">Deduplication &amp; Aggregation</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">ACID Write</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box">
+                  <span class="step-role">Storage Tier</span>
+                  <strong>RDS PostgreSQL</strong>
+                  <span class="step-proto">Compound Index &amp; Audit Log</span>
                 </div>
               </div>
 
@@ -1956,48 +1962,54 @@
               </div>
 
               <div class="diagram-canvas">
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Collaborative Clients</span>
-                    <strong>React Browser Clients</strong>
-                    <span class="step-proto">WSS Connection (Bidirectional)</span>
-                  </div>
-                  <div class="flow-arrow"><span>Card Moved</span> →</div>
+                <div class="step-box">
+                  <span class="step-role">Collaborative Clients</span>
+                  <strong>React Browser Clients</strong>
+                  <span class="step-proto">WSS Connection (Bidirectional)</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-blue">
-                    <span class="step-role">AWS API Gateway WS</span>
-                    <strong>Connection Manager</strong>
-                    <span class="step-proto">Offloads TCP Keep-Alives</span>
-                  </div>
-                  <div class="flow-arrow"><span>Route $default</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Card Moved</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-emerald">
-                    <span class="step-role">Connection Registry</span>
-                    <strong>DynamoDB Store</strong>
-                    <span class="step-proto">connectionId + workspaceId + TTL</span>
-                  </div>
-                  <div class="flow-arrow"><span>Broadcast Trigger</span> →</div>
+                <div class="step-box highlight-blue">
+                  <span class="step-role">AWS API Gateway WS</span>
+                  <strong>Connection Manager</strong>
+                  <span class="step-proto">Offloads TCP Keep-Alives</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-amber">
-                    <span class="step-role">Event Fan-Out</span>
-                    <strong>Redis Pub/Sub + Lambda</strong>
-                    <span class="step-proto">Channel Multi-Cast &lt; 40ms</span>
-                  </div>
-                  <div class="flow-arrow"><span>Push to Peers</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Route $default</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Connected Peers</span>
-                    <strong>Team Boards Sync</strong>
-                    <span class="step-proto">Real-Time UI State Update</span>
-                  </div>
+                <div class="step-box highlight-emerald">
+                  <span class="step-role">Connection Registry</span>
+                  <strong>DynamoDB Store</strong>
+                  <span class="step-proto">connectionId + workspaceId + TTL</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Broadcast Trigger</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box highlight-amber">
+                  <span class="step-role">Event Fan-Out</span>
+                  <strong>Redis Pub/Sub + Lambda</strong>
+                  <span class="step-proto">Channel Multi-Cast &lt; 40ms</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Push to Peers</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box">
+                  <span class="step-role">Connected Peers</span>
+                  <strong>Team Boards Sync</strong>
+                  <span class="step-proto">Real-Time UI State Update</span>
                 </div>
               </div>
 
@@ -2027,48 +2039,54 @@
               </div>
 
               <div class="diagram-canvas">
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Borrower</span>
-                    <strong>Loan Application</strong>
-                    <span class="step-proto">Encrypted HTTPS Payload</span>
-                  </div>
-                  <div class="flow-arrow"><span>Submit Form</span> →</div>
+                <div class="step-box">
+                  <span class="step-role">Borrower</span>
+                  <strong>Loan Application</strong>
+                  <span class="step-proto">Encrypted HTTPS Payload</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-blue">
-                    <span class="step-role">Underwriting Service</span>
-                    <strong>Node.js Backend</strong>
-                    <span class="step-proto">JWT Auth &amp; DTO Sanitize</span>
-                  </div>
-                  <div class="flow-arrow"><span>Inquiry API</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Submit Form</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-amber">
-                    <span class="step-role">Third-Party Bureau</span>
-                    <strong>Credit Rating API</strong>
-                    <span class="step-proto">FICO / Credit Score Return</span>
-                  </div>
-                  <div class="flow-arrow"><span>Score &amp; Rate</span> →</div>
+                <div class="step-box highlight-blue">
+                  <span class="step-role">Underwriting Service</span>
+                  <strong>Node.js Backend</strong>
+                  <span class="step-proto">JWT Auth &amp; DTO Sanitize</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box highlight-emerald">
-                    <span class="step-role">Document Vault</span>
-                    <strong>AWS S3 (SSE-KMS)</strong>
-                    <span class="step-proto">Encrypted PDFs &amp; Identity</span>
-                  </div>
-                  <div class="flow-arrow"><span>Audit Record</span> →</div>
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Inquiry API</span>
+                  <span class="arrow-icon">→</span>
                 </div>
 
-                <div class="flow-step">
-                  <div class="step-box">
-                    <span class="step-role">Compliance Ledger</span>
-                    <strong>Amazon RDS PostgreSQL</strong>
-                    <span class="step-proto">Immutable Audit Trail</span>
-                  </div>
+                <div class="step-box highlight-amber">
+                  <span class="step-role">Third-Party Bureau</span>
+                  <strong>Credit Rating API</strong>
+                  <span class="step-proto">FICO / Credit Score Return</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Score &amp; Rate</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box highlight-emerald">
+                  <span class="step-role">Document Vault</span>
+                  <strong>AWS S3 (SSE-KMS)</strong>
+                  <span class="step-proto">Encrypted PDFs &amp; Identity</span>
+                </div>
+
+                <div class="flow-arrow" aria-hidden="true">
+                  <span class="arrow-label">Audit Record</span>
+                  <span class="arrow-icon">→</span>
+                </div>
+
+                <div class="step-box">
+                  <span class="step-role">Compliance Ledger</span>
+                  <strong>Amazon RDS PostgreSQL</strong>
+                  <span class="step-proto">Immutable Audit Trail</span>
                 </div>
               </div>
 
