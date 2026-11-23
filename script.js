@@ -93,6 +93,13 @@ function initNavbar() {
         link.classList.add('active');
       }
     });
+
+    drawerLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${currentSectionId}`) {
+        link.classList.add('active');
+      }
+    });
   }, { passive: true });
 
   // Mobile drawer toggle

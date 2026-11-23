@@ -248,6 +248,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .navbar-brand {
@@ -256,6 +257,8 @@ button {
   gap: 10px;
   font-weight: 600;
   letter-spacing: -0.02em;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .brand-monogram {
@@ -271,6 +274,7 @@ button {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.5px;
+  flex-shrink: 0;
   transition: transform var(--transition-fast);
 }
 
@@ -281,12 +285,16 @@ button {
 .brand-name {
   font-size: 15px;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 18px;
+  flex-wrap: nowrap;
+  flex-shrink: 1;
+  white-space: nowrap;
 }
 
 .nav-link {
@@ -294,6 +302,9 @@ button {
   font-weight: 500;
   color: var(--text-muted);
   letter-spacing: -0.01em;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  flex-shrink: 0;
   transition: color var(--transition-fast);
 }
 
@@ -306,6 +317,8 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .icon-btn {
@@ -318,6 +331,7 @@ button {
   border: 1px solid var(--border-subtle);
   background-color: transparent;
   color: var(--text-secondary);
+  flex-shrink: 0;
   transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -351,6 +365,8 @@ button {
   border: 1px solid var(--border-card);
   color: var(--text-primary);
   background-color: var(--bg-card);
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -368,6 +384,7 @@ button {
   gap: 5px;
   width: 36px;
   height: 36px;
+  flex-shrink: 0;
   padding: 8px;
   border-radius: 8px;
 }
@@ -399,23 +416,24 @@ button {
   left: 0;
   right: 0;
   background-color: var(--nav-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--nav-border);
   box-shadow: var(--shadow-lg);
   max-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   opacity: 0;
   transform: translateY(-8px);
-  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.28s ease,
-              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease,
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
   z-index: 99;
 }
 
 .navbar-drawer.open {
-  max-height: 560px;
+  max-height: calc(100vh - 64px);
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -424,19 +442,24 @@ button {
 .navbar-drawer-inner {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px 24px 28px;
+  gap: 10px;
+  padding: 18px 24px 36px;
+  max-height: calc(100vh - 80px);
 }
 
 .drawer-link {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-secondary);
-  padding: 4px 0;
+  padding: 6px 0;
+  white-space: nowrap;
+  transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
-.drawer-link:hover {
+.drawer-link:hover,
+.drawer-link.active {
   color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .drawer-footer {
@@ -2812,298 +2835,7 @@ button {
   margin: 16px 0;
 }
 
-/* --------------------------------------------------------------------------
-   21. Responsive Breakpoints (All Device Sizes)
-   -------------------------------------------------------------------------- */
-@media (max-width: 960px) {
-  .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stack-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .principles-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .capabilities-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .case-studies-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .writing-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .toolkit-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .contact-wrapper {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar-links {
-    display: none;
-  }
-
-  .navbar-hamburger {
-    display: flex;
-  }
-
-  .section {
-    padding-top: 68px;
-    padding-bottom: 68px;
-  }
-
-  .hero-section {
-    padding-top: 88px;
-    padding-bottom: 56px;
-    min-height: auto;
-  }
-
-  .stack-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .capabilities-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .credentials-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .timeline::before {
-    left: 12px;
-  }
-
-  .timeline-marker {
-    left: 5px;
-  }
-
-  .timeline-item {
-    padding-left: 36px;
-  }
-
-  .exp-header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .faq-question {
-    padding: 18px 20px;
-    font-size: 15px;
-  }
-
-  .faq-body-inner {
-    padding: 0 20px 20px 20px;
-    font-size: 14px;
-  }
-
-  .faq-icon-wrapper {
-    width: 28px;
-    height: 28px;
-  }
-
-  .project-filters {
-    gap: 6px;
-  }
-
-  .filter-btn {
-    padding: 6px 14px;
-    font-size: 12.5px;
-  }
-
-  .footer-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 540px) {
-  .container {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
-  .hero-avatar {
-    width: 96px;
-    height: 96px;
-  }
-
-  .hero-title {
-    font-size: clamp(32px, 8.5vw, 44px);
-    letter-spacing: -0.03em;
-  }
-
-  .hero-role-wrapper {
-    font-size: 15px;
-    height: 28px;
-    margin-bottom: 18px;
-  }
-
-  .hero-summary {
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-
-  .hero-cta-group {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .hero-cta-group a {
-    width: 100%;
-  }
-
-  .hero-socials {
-    gap: 6px;
-  }
-
-  .social-chip {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .metric-card {
-    padding: 16px 12px;
-  }
-
-  .metric-number {
-    font-size: 28px;
-  }
-
-  .metric-label {
-    font-size: 12px;
-  }
-
-  .metric-detail {
-    display: none;
-  }
-
-  .about-card,
-  .stack-card,
-  .principle-card,
-  .timeline-card,
-  .project-card,
-  .capability-card,
-  .credential-card,
-  .contact-card {
-    padding: 24px 18px;
-    border-radius: 14px;
-  }
-
-  .faq-question {
-    padding: 16px 16px;
-    font-size: 14px;
-    gap: 12px;
-  }
-
-  .faq-body-inner {
-    padding: 0 16px 18px 16px;
-    font-size: 13.5px;
-  }
-
-  .contact-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .contact-link {
-    font-size: 13px;
-    word-break: break-all;
-  }
-
-  .btn-copy {
-    align-self: flex-start;
-  }
-
-  .modal-container {
-    padding: 22px 18px;
-    border-radius: 14px;
-    max-width: 95vw;
-  }
-
-  .modal-title {
-    font-size: 20px;
-  }
-
-  .toolkit-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .blueprint-viewer {
-    padding: 20px 16px;
-  }
-
-  .blueprint-meta {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .blueprint-callouts {
-    grid-template-columns: 1fr;
-  }
-
-  .case-impact-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-
-  .diagram-canvas {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .flow-step {
-    flex-direction: column;
-    min-width: 100%;
-  }
-
-  .flow-arrow {
-    transform: rotate(90deg);
-    margin: 8px 0;
-  }
-}
-
-@media (max-width: 380px) {
-  .brand-name {
-    display: none;
-  }
-
-  .btn-resume-nav {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .metrics-grid {
-    grid-template-columns: 1fr;
-  }
-}
+/* [Responsive Breakpoints relocated to Section 26 at end of file for clean cascade] */
 
 /* ==========================================================================
    21. Architecture Decision Matrix & Latency Playground (#benchmarks)
@@ -3589,12 +3321,71 @@ button {
 }
 
 /* ==========================================================================
-   24. Responsive Rules for New Sections
+   26. Comprehensive Responsive System (All Viewport Sizes: 320px – 4K)
    ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   A. Compact Desktop & Wide Tablets (max-width: 1120px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1120px) {
+  .navbar-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .navbar-links {
+    gap: 14px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   B. Tablets & Medium Screens (max-width: 960px)
+   -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
-  .testimonials-grid {
+  /* Switch navbar to mobile hamburger drawer */
+  .navbar-links {
+    display: none !important;
+  }
+
+  .navbar-hamburger {
+    display: flex !important;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stack-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .principles-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+  }
+
+  .capabilities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-studies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .writing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolkit-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .oss-grid {
@@ -3602,22 +3393,360 @@ button {
     gap: 18px;
   }
 
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+
   .solver-result-panel {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* --------------------------------------------------------------------------
+   C. Small Tablets & Phablets (max-width: 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .section {
+    padding-top: 68px;
+    padding-bottom: 68px;
+  }
+
+  .hero-section {
+    padding-top: 88px;
+    padding-bottom: 56px;
+    min-height: auto;
+  }
+
+  .stack-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .credentials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline::before {
+    left: 12px;
+  }
+
+  .timeline-marker {
+    left: 5px;
+  }
+
+  .timeline-item {
+    padding-left: 36px;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .faq-question {
+    padding: 18px 20px;
+    font-size: 15px;
+  }
+
+  .faq-body-inner {
+    padding: 0 20px 20px 20px;
+    font-size: 14px;
+  }
+
+  .faq-icon-wrapper {
+    width: 28px;
+    height: 28px;
+  }
+
+  .project-filters {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  /* Interactive Blueprints responsive flow at 768px */
+  .blueprint-viewer {
+    padding: 20px 16px;
+  }
+
+  .blueprint-meta {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .blueprint-callouts {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-canvas {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 12px;
+  }
+
+  .flow-step {
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+    margin: 8px 0;
+  }
+
+  .blueprint-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    gap: 8px;
+    scrollbar-width: none;
+  }
+
+  .blueprint-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .blueprint-tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Case study impact row */
+  .case-impact-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Prevent iOS Safari from zooming on inputs/selects */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   D. Large Phones & Small Tablets (max-width: 600px)
+   -------------------------------------------------------------------------- */
 @media (max-width: 600px) {
   .solver-result-panel {
     grid-template-columns: 1fr;
   }
 
   .scenario-solver-card {
-    padding: 20px;
+    padding: 20px 16px;
   }
 
   .matrix-tab-btn {
     padding: 6px 12px;
     font-size: 12px;
+  }
+
+  .toolkit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   E. Standard Mobile Phones (max-width: 540px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 540px) {
+  .container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .navbar-container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-avatar {
+    width: 92px;
+    height: 92px;
+  }
+
+  .hero-title {
+    font-size: clamp(30px, 8.5vw, 40px);
+    letter-spacing: -0.03em;
+  }
+
+  .hero-role-wrapper {
+    font-size: 14.5px;
+    height: 28px;
+    margin-bottom: 18px;
+  }
+
+  .hero-role-dynamic {
+    min-width: 0;
+  }
+
+  .hero-summary {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-cta-group a,
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+  }
+
+  .hero-socials {
+    gap: 6px;
+  }
+
+  .social-chip {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 12px;
+  }
+
+  .metric-card,
+  .metric-item {
+    padding: 14px 12px;
+  }
+
+  .metric-number,
+  .metric-value {
+    font-size: 28px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+  }
+
+  .metric-detail {
+    display: none;
+  }
+
+  .about-card,
+  .stack-card,
+  .principle-card,
+  .timeline-card,
+  .project-card,
+  .capability-card,
+  .credential-card,
+  .contact-card,
+  .oss-card,
+  .testimonial-card {
+    padding: 22px 16px;
+    border-radius: 14px;
+  }
+
+  .faq-question {
+    padding: 16px 16px;
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  .faq-body-inner {
+    padding: 0 16px 18px 16px;
+    font-size: 13.5px;
+  }
+
+  .contact-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .contact-link {
+    font-size: 13px;
+    word-break: break-all;
+  }
+
+  .btn-copy {
+    align-self: flex-start;
+  }
+
+  .modal-backdrop {
+    padding: 12px;
+  }
+
+  .modal-container {
+    padding: 20px 16px;
+    border-radius: 14px;
+    max-width: 100%;
+  }
+
+  .modal-title {
+    font-size: 19px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   F. Ultra-Compact Mobile Devices (max-width: 380px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 380px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .navbar-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .btn-resume-nav {
+    padding: 5px 9px;
+    font-size: 11.5px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hero-title {
+    font-size: 26px;
+  }
+
+  .hero-status-pill {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
   }
 }
